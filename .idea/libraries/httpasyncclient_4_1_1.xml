@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="httpasyncclient-4.1.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libraries/httpasyncclient-4.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/httpclient-4.5.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/httpcore-4.4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/httpcore-nio-4.4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/httpmime-4.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
