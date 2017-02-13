@@ -1,0 +1,8 @@
+com.mashape.unirest.http
+com.mashape.unirest.http.async
+com.mashape.unirest.http.async.utils
+com.mashape.unirest.http.exceptions
+com.mashape.unirest.http.options
+com.mashape.unirest.http.utils
+com.mashape.unirest.request
+com.mashape.unirest.request.body
