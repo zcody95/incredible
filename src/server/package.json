@@ -1,0 +1,11 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server for incredible",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "incredible",
+  "license": "ISC"
+}
