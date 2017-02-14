@@ -34,12 +34,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post('', function (req, res) {
-   // First read existing users.
-   var exec = require('child_process').exec;
-   var compileit = 'java -cp ../ com.calpoly.incredible.Incredible ' + req.body.msg;
+   var spawn = require('child_process').spawn;
+   var args = ['-cp','../target/classes/;../libraries/*', 'com.calpoly.incredible.Incredible', '' + req.body.msg];
+   var javaproc = spawn('java', args);
 
-   exec(compileit, function(error, stdout, stderr) {
-     res.end(stdout);
+   javaproc.stdout.on('data', function(dat) {
+     res.write(dat);
+   });
+
+   javaproc.stderr.on('data', function(dat) {
+     res.write(dat);
+   });
+
+   javaproc.on('exit', function(code) {
+     res.end('\n Ended with code ' + code);
    });
 })
 
