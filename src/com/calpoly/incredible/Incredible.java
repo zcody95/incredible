@@ -83,7 +83,7 @@ public class Incredible {
                 .body("{\"t1\":\""+title+"\",\"t2\":\"Put other title here\"}")
                 .asJson();
 
-        System.out.println("AFTER POST");
+        System.out.println("POST POST");
         System.out.println(response.getBody().toString());
         text = response.getBody().toString();
         s = new Scanner(text).useDelimiter(",");
