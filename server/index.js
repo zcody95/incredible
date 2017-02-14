@@ -35,7 +35,9 @@ app.use(bodyParser.json());
 
 app.post('', function (req, res) {
    var spawn = require('child_process').spawn;
-   var args = ['-cp','../target/classes/;../libraries/*', 'com.calpoly.incredible.Incredible', '' + req.body.msg];
+   
+   // For Windows Testing use ; instead of : on the next line
+   var args = ['-cp','../target/classes/:../libraries/*', 'com.calpoly.incredible.Incredible', '' + req.body.msg];
    var javaproc = spawn('java', args);
 
    javaproc.stdout.on('data', function(dat) {
