@@ -5,10 +5,31 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Scanner;
 
 public class Incredible {
+    private static String connectionUrl;
+    private static Connection con;
+
     public static void main(String[] args) throws UnirestException {
+
+        // Connects to the Azure Backend using JDBC
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connectionUrl = "jdbc:sqlserver://incredibleserver17.database.windows.net:1433;database=IncredibleStorage;" +
+                    "user=aibackend@outlook.com@incredibleserver17;" +
+                    "password={Backend123!};encrypt=true;" +
+                    "trustServerCertificate=false;" +
+                    "hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+            con = DriverManager.getConnection(connectionUrl);
+            System.out.println("Successfully connected to SQL database");
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         //HttpResponse<String> request = Unirest.get("https://yoda.p.mashape.com/yoda?sentence=You%20will%20learn%20how%20to%20speak%20like%20me%20someday.%20%20Oh%20wait.")
         //.header("X-Mashape-Authorization", "<Insert your Mashape key here>").asString();
