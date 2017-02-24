@@ -1,5 +1,6 @@
-package com.calpoly.incredible;;
+package com.calpoly.incredible;
 
+import java.util.Date;
 /**
  * This class stores all of the article data.
  * @author roslynsierra
@@ -12,6 +13,7 @@ public class Article {
    private String commonWord1;
    private String commonWord2;
    private String commonWord3;
+   private Date date;
 
    /*
     * Constructor for an Article takes in the url of the article.
@@ -25,6 +27,7 @@ public class Article {
       commonWord1 = "";
       commonWord2 = "";
       commonWord3 = "";
+      date = null;
    }
 
    /*
@@ -77,6 +80,13 @@ public class Article {
       return commonWord3;
    }
 
+   /*
+    * @return the date the article was published.
+    */
+   public Date getDate() {
+      return date;
+   }
+
    public void setCredibilityScore(double newScore) {
       credibilityScore = newScore;
    }
@@ -103,5 +113,9 @@ public class Article {
 
    public void setCommonWord3(String word3) {
       commonWord3 = word3;
+   }
+
+   public void setDate(Date date) {
+      this.date = date;
    }
 }
