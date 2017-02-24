@@ -16,6 +16,7 @@ import java.util.Scanner;
 public class Incredible {
    private static String connectionUrl;     
    private static Connection con;
+   private static Article article;
 
    /*
     * This is the main method that runs all the APIs
@@ -43,6 +44,8 @@ public class Incredible {
          return;
       }
       String url = args[0];
+      article = new Article(url);
+
       //Textuality API
       //Textuality pulls out important information from the link provided.
       //It will provide the title, content, links on the page, and images.
@@ -59,6 +62,7 @@ public class Incredible {
       String title = response.getBody().getObject().get("title").toString();
       System.out.println("Title: " + title);
       System.out.println("");
+      article.setTitle(title);
       //get body of article
       String body = response.getBody().getObject().get("content").toString();
 
@@ -113,6 +117,9 @@ public class Incredible {
       System.out.println("Second most common term is " + term2);
       System.out.println("Third most common term is " + term3);
       System.out.println("");
+      article.setCommonWord1(term1);
+      article.setCommonWord2(term2);
+      article.setCommonWord3(term3);
 
       //Semantic Relatedness API
       //Semantic Relatedness compares how related the two bodies of text are.
@@ -165,5 +172,6 @@ public class Incredible {
       int words = Integer.parseInt(wordcount);
       double errorPercentage = (double) count / (double) words;
       System.out.println("Percentage of error is " + errorPercentage);
+      article.setPercentError(errorPercentage);
    }
 }
