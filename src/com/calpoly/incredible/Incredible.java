@@ -31,7 +31,7 @@ public class Incredible {
       // Connects to the Azure Backend using JDBC
 //      try {
 //         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//         connectionUrl = "jdbc:sqlserver://incredibleserver17.database.wi    ndows.net:1433;database=IncredibleStorage;" +
+//         connectionUrl = "jdbc:sqlserver://incredibleserver17.database.windows.net:1433;database=IncredibleStorage;" +
 //            "user=aibackend@outlook.com@incredibleserver17;" +
 //            "password={Backend123!};encrypt=true;" +
 //            "trustServerCertificate=false;" +
@@ -49,29 +49,36 @@ public class Incredible {
       }
       String url = args[0];
       article = new Article(url);
-
-      //Textuality API
-      //Textuality pulls out important information from the link provided.
-      //It will provide the title, content, links on the page, and images.
+      HttpResponse<JsonNode> response;
+      String body = null;
 
       // These code snippets use an open-source library. http://unirest.io/java
-      HttpResponse<JsonNode> response = Unirest.post("https://extracttext.p.mashape.com/api/content_extract/")
-         .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
-         .header("Content-Type", "application/x-www-form-urlencoded")
-         .header("Accept", "application/json")
-         .field("dataurl", url)
-         .asJson();
+      try {
+         response = Textuality.post(url);
+         Textuality.printData(response);
+         article.setTitle(Textuality.getTitle(response));
+         body = Textuality.getBody(response);
+      } catch (Exception e) {
+         System.out.println("Textuality exception during post + ");
+         e.printStackTrace();
+      }
 
-      //get title of article
-      String title = response.getBody().getObject().get("title").toString();
-      System.out.println("Title: " + title);
-      System.out.println("");
-      article.setTitle(title);
-      //get body of article
-      String body = response.getBody().getObject().get("content").toString();
+//      News API - data source aggregator
+      ArrayList<String> queryStrings = new ArrayList<String>();
+      queryStrings.add("space");
+      queryStrings.add("life");
+      HttpResponse<JsonNode> newsResponse = Unirest
+              .get("http://api.nytimes.com/svc/search/v2/articlesearch.json?")
+              .queryString("fq", queryStrings)
+              .header("start_date", "20170215")
+              .header("end_date", "20170301")
+              .header("api-key", "db5630d16fcb4b2183e910881c98a3d2")
+              .asJson();
+
+      System.out.println("News: " + newsResponse.getBody().toString() + "\n");
 
 //       New York Times
-      ArrayList<String> queryStrings = new ArrayList<String>();
+      queryStrings.clear();
       queryStrings.add("space");
       queryStrings.add("life");
       HttpResponse<JsonNode> nytResponse = Unirest
@@ -148,7 +155,7 @@ public class Incredible {
          .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
          .header("Content-Type", "application/json")
          .header("Accept", "application/json")
-         .body("{\"t1\":\""+title+"\",\"t2\":\"Put other title here\"}")
+         .body("{\"t1\":\""+article.getTitle()+"\",\"t2\":\"Put other title here\"}")
          .asJson();
 
       System.out.println("Semantic Relatedness Score: " + response.getBody().getObject().get("v"));
