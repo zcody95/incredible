@@ -4,6 +4,9 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,23 +23,23 @@ public class Incredible {
 
    /*
     * This is the main method that runs all the APIs
-    * @param args the commanline arguments. args[0] must be a url passed
+    * @param args the commandline arguments. args[0] must be a url passed
     * in by the user.
     **/
    public static void main(String[] args) throws UnirestException {
       // Connects to the Azure Backend using JDBC
-      try {
-         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-         connectionUrl = "jdbc:sqlserver://incredibleserver17.database.wi    ndows.net:1433;database=IncredibleStorage;" +
-            "user=aibackend@outlook.com@incredibleserver17;" +
-            "password={Backend123!};encrypt=true;" +
-            "trustServerCertificate=false;" +
-            "hostNameInCertificate=*.database.windows.net;loginTimeo    ut=30;";
-         con = DriverManager.getConnection(connectionUrl);
-         System.out.println("Successfully connected to SQL database");
-      }catch(Exception e) {
-         e.printStackTrace();
-      }
+//      try {
+//         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//         connectionUrl = "jdbc:sqlserver://incredibleserver17.database.wi    ndows.net:1433;database=IncredibleStorage;" +
+//            "user=aibackend@outlook.com@incredibleserver17;" +
+//            "password={Backend123!};encrypt=true;" +
+//            "trustServerCertificate=false;" +
+//            "hostNameInCertificate=*.database.windows.net;loginTimeo    ut=30;";
+//         con = DriverManager.getConnection(connectionUrl);
+//         System.out.println("Successfully connected to SQL database");
+//      }catch(Exception e) {
+//         e.printStackTrace();
+//      }
 
       //check that the user passed in a url for the APIs 
       if (!(args.length >= 1)) {
@@ -173,5 +176,14 @@ public class Incredible {
       double errorPercentage = (double) count / (double) words;
       System.out.println("Percentage of error is " + errorPercentage);
       article.setPercentError(errorPercentage);
+
+      // New York Times
+       HttpResponse<JsonNode> breakingResponse = Unirest
+               .get("http://api.nytimes.com/svc/search/v2/articlesearch.json?" +
+                       "fq=romney&facet_field=day_of_week&begin_date=20120101&end_date=20120101&api-key=" +
+                       "db5630d16fcb4b2183e910881c98a3d2")
+               .asJson();
+
+       System.out.println(breakingResponse.getBody().toString());
    }
 }

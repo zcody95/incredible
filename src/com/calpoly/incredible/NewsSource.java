@@ -8,6 +8,7 @@ public class NewsSource {
    private String source;
    private double credibilityScore;
    private int numArticles;
+   private int score;
 
    /*
     * Constructor for the news source class.
