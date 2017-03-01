@@ -7,6 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -68,6 +69,20 @@ public class Incredible {
       article.setTitle(title);
       //get body of article
       String body = response.getBody().getObject().get("content").toString();
+
+//       New York Times
+      ArrayList<String> queryStrings = new ArrayList<String>();
+      queryStrings.add("space");
+      queryStrings.add("life");
+      HttpResponse<JsonNode> nytResponse = Unirest
+              .get("http://api.nytimes.com/svc/search/v2/articlesearch.json?")
+              .queryString("fq", queryStrings)
+              .header("start_date", "20170215")
+              .header("end_date", "20170301")
+              .header("api-key", "db5630d16fcb4b2183e910881c98a3d2")
+              .asJson();
+
+      System.out.println("NYT" + nytResponse.getBody().toString() + "\n");
 
       //Skittle 2.0 API
       //This pulls out the most opinionated sentences and determines if they have
@@ -176,14 +191,5 @@ public class Incredible {
       double errorPercentage = (double) count / (double) words;
       System.out.println("Percentage of error is " + errorPercentage);
       article.setPercentError(errorPercentage);
-
-      // New York Times
-       HttpResponse<JsonNode> breakingResponse = Unirest
-               .get("http://api.nytimes.com/svc/search/v2/articlesearch.json?" +
-                       "fq=romney&facet_field=day_of_week&begin_date=20120101&end_date=20120101&api-key=" +
-                       "db5630d16fcb4b2183e910881c98a3d2")
-               .asJson();
-
-       System.out.println(breakingResponse.getBody().toString());
    }
 }
