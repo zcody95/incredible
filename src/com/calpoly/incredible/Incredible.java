@@ -67,29 +67,13 @@ public class Incredible {
       ArrayList<String> queryStrings = new ArrayList<String>();
       queryStrings.add("space");
       queryStrings.add("life");
-      HttpResponse<JsonNode> newsResponse = Unirest
-              .get("http://api.nytimes.com/svc/search/v2/articlesearch.json?")
-              .queryString("fq", queryStrings)
-              .header("start_date", "20170215")
-              .header("end_date", "20170301")
-              .header("api-key", "db5630d16fcb4b2183e910881c98a3d2")
-              .asJson();
 
-      System.out.println("News: " + newsResponse.getBody().toString() + "\n");
+      try {
+         NewsAPIExperiments.printNYTget(queryStrings);
+      } catch (Exception e) {
+         System.out.println("NYT exception during get");
+      }
 
-//       New York Times
-      queryStrings.clear();
-      queryStrings.add("space");
-      queryStrings.add("life");
-      HttpResponse<JsonNode> nytResponse = Unirest
-              .get("http://api.nytimes.com/svc/search/v2/articlesearch.json?")
-              .queryString("fq", queryStrings)
-              .header("start_date", "20170215")
-              .header("end_date", "20170301")
-              .header("api-key", "db5630d16fcb4b2183e910881c98a3d2")
-              .asJson();
-
-      System.out.println("NYT" + nytResponse.getBody().toString() + "\n");
 
       //Skittle 2.0 API
       //This pulls out the most opinionated sentences and determines if they have
