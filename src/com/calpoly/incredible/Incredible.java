@@ -59,7 +59,7 @@ public class Incredible {
          article.setTitle(Textuality.getTitle(response));
          body = Textuality.getBody(response);
       } catch (Exception e) {
-         System.out.println("Textuality exception during post + ");
+         System.out.println("Textuality exception during post:");
          e.printStackTrace();
       }
 
@@ -70,7 +70,7 @@ public class Incredible {
       try {
          NewsAPIExperiments.printNYTget(queryStrings);
       } catch (Exception e) {
-         System.out.println("NYT exception during get");
+         System.out.println("NYT exception during get: ");
       }
 
       //Skittle 2.0 API
@@ -87,7 +87,7 @@ public class Incredible {
          article.setCommonWord2(commonWords.get(1));
          article.setCommonWord3(commonWords.get(2));
       } catch (Exception e) {
-         System.out.println("Skittle exception during post + ");
+         System.out.println("Skittle exception during post: ");
          e.printStackTrace();
       }
 
@@ -95,16 +95,14 @@ public class Incredible {
       //Semantic Relatedness API
       //Semantic Relatedness compares how related the two bodies of text are.
       //This could be used to compare titles and find similar articles
-
-      // These code snippets use an open-source library. http://unirest.io/java
-      response = Unirest.post("https://amtera.p.mashape.com/relatedness/en")
-         .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
-         .header("Content-Type", "application/json")
-         .header("Accept", "application/json")
-         .body("{\"t1\":\""+article.getTitle()+"\",\"t2\":\"Put other title here\"}")
-         .asJson();
-
-      System.out.println("Semantic Relatedness Score: " + response.getBody().getObject().get("v"));
+      float relatednessScore = -1;
+      try {
+         relatednessScore = SemanticRelatedness.getSemanticRelatedness(url, article.getTitle(), "Second Article goes here");
+         System.out.println("Semantic relatedness score: " + relatednessScore);
+      } catch (Exception e) {
+         System.out.println("Semantic relatedness Exception during post: ");
+         e.printStackTrace();
+      }
 
       //Grammar and Spell Checking
       //Most credible articles will have very good grammar and spelling.
@@ -114,35 +112,12 @@ public class Incredible {
       System.out.println("");
       //Language Tool API
       // These code snippets use an open-source library. http://unirest.io/java
-      HttpResponse<String> spelling = Unirest.post("https://dnaber-languagetool.p.mashape.com/v2/check")
-         .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
-         .header("Content-Type", "application/x-www-form-urlencoded")
-         .header("Accept", "text/plain")
-         .field("language", "en-US")
-         .field("text", body)
-         .asString();
 
-      //count number of mistakes
-      String str = spelling.getBody();
-      String findStr = "\"message\":";
-      int lastIndex = 0;
-      int count = 0;
-      while(lastIndex != -1) {
-         lastIndex = str.indexOf(findStr,lastIndex);
-         if(lastIndex != -1) {
-            count ++;
-            lastIndex += findStr.length();
-         }
+      try {
+         article.setPercentError(LanguageTool.getPercentError(body));
+      } catch (Exception e) {
+         System.out.println("Language checking Exception during post: ");
+         e.printStackTrace();
       }
-      System.out.println("There were " + count + " errors");
-
-      //get number of words
-      String wordcount = spelling.getHeaders().get("Content-Length").toString();
-      System.out.println("Number of words is " + wordcount);
-      wordcount = wordcount.substring(1, wordcount.length() - 1);
-      int words = Integer.parseInt(wordcount);
-      double errorPercentage = (double) count / (double) words;
-      System.out.println("Percentage of error is " + errorPercentage);
-      article.setPercentError(errorPercentage);
    }
 }
