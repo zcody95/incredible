@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b862c1f8-8bf9-4248-863e-7a0ee24cb010" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/calpoly/incredible/Incredible.java" afterPath="$PROJECT_DIR$/src/com/calpoly/incredible/Incredible.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java" afterPath="$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,26 +29,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Incredible.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Incredible.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/calpoly/incredible/Incredible.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="715">
-              <caret line="117" column="39" lean-forward="false" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+            <state relative-caret-position="136">
+              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#2388#2396#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Skittle.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Skittle.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="10" column="69" lean-forward="false" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
+            <state relative-caret-position="546">
+              <caret line="68" column="27" lean-forward="false" selection-start-line="68" selection-start-column="27" selection-end-line="68" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1265#1273#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -170,8 +169,8 @@
         <option value="$PROJECT_DIR$/src/com/calpoly/incredible/NewsSource.java" />
         <option value="$PROJECT_DIR$/src/com/calpoly/incredible/Textuality.java" />
         <option value="$PROJECT_DIR$/src/com/calpoly/incredible/NewsAPIExperiments.java" />
-        <option value="$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java" />
         <option value="$PROJECT_DIR$/src/com/calpoly/incredible/Incredible.java" />
+        <option value="$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java" />
       </list>
     </option>
   </component>
@@ -540,7 +539,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#2388#2396#0" expanded="true" />
           </folding>
         </state>
@@ -604,7 +602,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#2388#2396#0" expanded="true" />
           </folding>
         </state>
@@ -623,7 +620,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#2388#2396#0" expanded="true" />
           </folding>
         </state>
@@ -750,23 +746,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java">
+    <entry file="file://$PROJECT_DIR$/src/com/calpoly/incredible/Incredible.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="10" column="69" lean-forward="false" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#2388#2396#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/calpoly/incredible/Incredible.java">
+    <entry file="file://$PROJECT_DIR$/src/com/calpoly/incredible/Skittle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="715">
-          <caret line="117" column="39" lean-forward="false" selection-start-line="117" selection-start-column="39" selection-end-line="117" selection-end-column="39" />
+        <state relative-caret-position="546">
+          <caret line="68" column="27" lean-forward="false" selection-start-line="68" selection-start-column="27" selection-end-line="68" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2388#2396#0" expanded="true" />
+            <element signature="e#1265#1273#0" expanded="true" />
           </folding>
         </state>
       </provider>

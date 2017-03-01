@@ -78,44 +78,14 @@ public class Incredible {
       //positive or negative connotation. It also pulls out the most common terms.
 
       //find the top three most common terms in article
-      String term1 = "", term2 = "", term3 = "";
-      int count1 = 0, count2 = 0, count3 = 0;
       try {
          response = Skittle.post(url, body);
          JSONArray docs = response.getBody().getObject().getJSONArray("docs");
          JSONObject json = (JSONObject) docs.getJSONObject(0);
-         JSONArray terms = json.getJSONArray("terms");
-         // TODO: pull this into a method in Skittle
-         for (int i = 0; i < terms.length(); i++) {
-            JSONObject term = (JSONObject) terms.get(i);
-            int current = (Integer) term.get("count");
-            if (current > count1 && current > count2 && current > count3) {
-               count3 = count2;
-               term3 = term2;
-               count2 = count1;
-               term2 = term1;
-               count1 = current;
-               term1 = (String) term.get("term");
-            }
-            else if (current > count2 && current > count3) {
-               count3 = count2;
-               term3 = term2;
-               count2 = current;
-               term2 = (String) term.getString("term");
-            }
-            else if (current > count3) {
-               count3 = current;
-               term3 = (String) term.getString("term");
-            }
-
-         }
-         System.out.println("Most common term is " + term1);
-         System.out.println("Second most common term is " + term2);
-         System.out.println("Third most common term is " + term3);
-         System.out.println("");
-         article.setCommonWord1(term1);
-         article.setCommonWord2(term2);
-         article.setCommonWord3(term3);
+         ArrayList<String> commonWords = Skittle.getCommonWords(json);
+         article.setCommonWord1(commonWords.get(0));
+         article.setCommonWord2(commonWords.get(1));
+         article.setCommonWord3(commonWords.get(2));
       } catch (Exception e) {
          System.out.println("Skittle exception during post + ");
          e.printStackTrace();
