@@ -52,7 +52,7 @@ public class Incredible {
       HttpResponse<JsonNode> response;
       String body = null;
 
-      // These code snippets use an open-source library. http://unirest.io/java
+      // Textuality - gets title, content, links, and images
       try {
          response = Textuality.post(url);
          Textuality.printData(response);
@@ -63,72 +63,64 @@ public class Incredible {
          e.printStackTrace();
       }
 
-//      News API - data source aggregator
+      // News APIs - data source aggregators
       ArrayList<String> queryStrings = new ArrayList<String>();
       queryStrings.add("space");
       queryStrings.add("life");
-
       try {
          NewsAPIExperiments.printNYTget(queryStrings);
       } catch (Exception e) {
          System.out.println("NYT exception during get");
       }
 
-
       //Skittle 2.0 API
       //This pulls out the most opinionated sentences and determines if they have
       //positive or negative connotation. It also pulls out the most common terms.
 
-      // These code snippets use an open-source library.
-      response = Unirest.post("https://sentinelprojects-skyttle20.p.mashape.com/")
-         .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
-         .header("Content-Type", "application/x-www-form-urlencoded")
-         .header("Accept", "application/json")
-         .field("annotate", 1)
-         .field("keywords", 1)
-         .field("lang", "en")
-         .field("sentiment", 1)
-         .field("text", body)
-         .asJson();
-
       //find the top three most common terms in article
       String term1 = "", term2 = "", term3 = "";
       int count1 = 0, count2 = 0, count3 = 0;
+      try {
+         response = Skittle.post(url, body);
+         JSONArray docs = response.getBody().getObject().getJSONArray("docs");
+         JSONObject json = (JSONObject) docs.getJSONObject(0);
+         JSONArray terms = json.getJSONArray("terms");
+         // TODO: pull this into a method in Skittle
+         for (int i = 0; i < terms.length(); i++) {
+            JSONObject term = (JSONObject) terms.get(i);
+            int current = (Integer) term.get("count");
+            if (current > count1 && current > count2 && current > count3) {
+               count3 = count2;
+               term3 = term2;
+               count2 = count1;
+               term2 = term1;
+               count1 = current;
+               term1 = (String) term.get("term");
+            }
+            else if (current > count2 && current > count3) {
+               count3 = count2;
+               term3 = term2;
+               count2 = current;
+               term2 = (String) term.getString("term");
+            }
+            else if (current > count3) {
+               count3 = current;
+               term3 = (String) term.getString("term");
+            }
 
-      JSONArray docs = response.getBody().getObject().getJSONArray("docs");
-      JSONObject json = (JSONObject) docs.getJSONObject(0);
-      JSONArray terms = json.getJSONArray("terms");
-
-      for (int i = 0; i < terms.length(); i++) {
-         JSONObject term = (JSONObject) terms.get(i);
-         int current = (Integer) term.get("count");
-         if (current > count1 && current > count2 && current > count3) {
-            count3 = count2;
-            term3 = term2;
-            count2 = count1;
-            term2 = term1;
-            count1 = current;
-            term1 = (String) term.get("term");
          }
-         else if (current > count2 && current > count3) {
-            count3 = count2;
-            term3 = term2;
-            count2 = current;
-            term2 = (String) term.getString("term");
-         }
-         else if (current > count3) {
-            count3 = current;
-            term3 = (String) term.getString("term");
-         }
-
+         System.out.println("Most common term is " + term1);
+         System.out.println("Second most common term is " + term2);
+         System.out.println("Third most common term is " + term3);
+         System.out.println("");
+         article.setCommonWord1(term1);
+         article.setCommonWord2(term2);
+         article.setCommonWord3(term3);
+      } catch (Exception e) {
+         System.out.println("Skittle exception during post + ");
+         e.printStackTrace();
       }
-      System.out.println("Most common term is " + term1);
-      System.out.println("Second most common term is " + term2);
-      System.out.println("Third most common term is " + term3);
-      System.out.println("");
-      article.setCommonWord1(term1);
-      article.setCommonWord2(term2);
-      article.setCommonWord3(term3);
+
 
       //Semantic Relatedness API
       //Semantic Relatedness compares how related the two bodies of text are.
