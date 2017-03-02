@@ -48,19 +48,6 @@ public final class RawScoreCalculator {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //    HttpResponse<JsonNode> response;
 //    String body = null;
 //

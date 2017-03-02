@@ -16,6 +16,9 @@ public class Article {
    private String commonWord1;
    private String commonWord2;
    private String commonWord3;
+   private String commonSentence1;
+   private String commonSentence2;
+   private String commonSentence3;
    private Date date;
 
    /*
@@ -29,6 +32,9 @@ public class Article {
       commonWord1 = "";
       commonWord2 = "";
       commonWord3 = "";
+      commonSentence1 = "";
+      commonSentence2 = "";
+      commonSentence3 = "";
       date = null;
       body = "";
       source = "";
@@ -40,6 +46,7 @@ public class Article {
       return  source + "|" +
               url + "|" + "[" +
               commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + "|" +
+              "[" + commonSentence1 + ".," + commonSentence2 + ".," + commonSentence3 + ".]" + "|" +
               percentError + "|" +
               relatednesScore + "|";
    }
@@ -92,6 +99,27 @@ public class Article {
     */
    public String getCommonWord3() {
       return commonWord3;
+   }
+
+   /*
+    * @return the sentence with the most common words used in it.
+    */
+   public String getCommonSentence1() {
+      return commonSentence1;
+   }
+
+   /*
+    * @return the sentence with the most common words used in it.
+    */
+   public String getCommonSentence2() {
+      return commonSentence2;
+   }
+
+   /*
+    * @return the sentence with the most common words used in it.
+    */
+   public String getCommonSentence3() {
+      return commonSentence3;
    }
 
    /*
@@ -159,6 +187,12 @@ public class Article {
    public void setCommonWord3(String word3) {
       commonWord3 = word3;
    }
+
+   public void setCommonSentence1(String sentence1) {commonSentence1 = sentence1; };
+
+   public void setCommonSentence2(String sentence2) {commonSentence2 = sentence2; };
+
+   public void setCommonSentence3(String sentence3) {commonSentence3 = sentence3; };
 
    public void setDate(Date date) {
       this.date = date;
