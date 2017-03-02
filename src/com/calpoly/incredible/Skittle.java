@@ -10,9 +10,12 @@ import java.util.ArrayList;
 
 /**
  * Created by Jenna on 3/1/17.
+ * This pulls out the most opinionated sentences and determines if they have
+ * positive or negative connotation. It also pulls out the most common terms.
  */
 public final class Skittle {
-    public static HttpResponse<JsonNode> post(String url, String body) throws Exception {
+
+    public static void setCommonWords(String url, Article article) throws Exception {
 
         HttpResponse<JsonNode> response = Unirest.post("https://sentinelprojects-skyttle20.p.mashape.com/")
                 .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
@@ -22,13 +25,20 @@ public final class Skittle {
                 .field("keywords", 1)
                 .field("lang", "en")
                 .field("sentiment", 1)
-                .field("text", body)
+                .field("text", article.getBody())
                 .asJson();
 
-        return response;
+
+        JSONArray docs = response.getBody().getObject().getJSONArray("docs");
+        JSONObject json = (JSONObject) docs.getJSONObject(0);
+        ArrayList<String> commonWords = Skittle.getCommonWords(json);
+
+        article.setCommonWord1(commonWords.get(0));
+        article.setCommonWord2(commonWords.get(1));
+        article.setCommonWord3(commonWords.get(2));
     }
 
-    public static ArrayList<String> getCommonWords(JSONObject json) {
+    private static ArrayList<String> getCommonWords(JSONObject json) {
         JSONArray terms = json.getJSONArray("terms");
         String term1 = "", term2 = "", term3 = "";
         int count1 = 0, count2 = 0, count3 = 0;
@@ -56,12 +66,6 @@ public final class Skittle {
                 term3 = (String) term.getString("term");
             }
         }
-
-
-        System.out.println("Most common term is " + term1);
-        System.out.println("Second most common term is " + term2);
-        System.out.println("Third most common term is " + term3);
-        System.out.println("");
 
         commonWords.add(term1);
         commonWords.add(term2);

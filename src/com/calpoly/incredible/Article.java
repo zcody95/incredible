@@ -8,8 +8,11 @@ import java.util.Date;
 public class Article {
    private double credibilityScore;
    private double percentError;
+   private float relatednesScore;
    private String title;
+   private String body;
    private String url;
+   private String source;
    private String commonWord1;
    private String commonWord2;
    private String commonWord3;
@@ -19,15 +22,26 @@ public class Article {
     * Constructor for an Article takes in the url of the article.
     * @param url the url of the article.
     */
-   public Article(String url) {
+   public Article() {
       credibilityScore = 0.0;
       percentError = 0.0;
       title = "";
-      this.url = url;
       commonWord1 = "";
       commonWord2 = "";
       commonWord3 = "";
       date = null;
+      body = "";
+      source = "";
+   }
+
+   @Override
+   public String toString() {
+
+      return  source + "|" +
+              url + "|" + "[" +
+              commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + "|" +
+              percentError + "|" +
+              relatednesScore + "|";
    }
 
    /*
@@ -49,7 +63,7 @@ public class Article {
     * @return the title of the article.
     */
    public String getTitle() {
-      return title;
+      return this.title;
    }
 
    /*
@@ -87,6 +101,10 @@ public class Article {
       return date;
    }
 
+   public void setBody(String body) { this.body = body; }
+
+   public String getBody() { return body; }
+
    public void setCredibilityScore(double newScore) {
       credibilityScore = newScore;
    }
@@ -101,6 +119,33 @@ public class Article {
 
    public void setUrl(String url) {
       this.url = url;
+      setSource();
+   }
+
+   // captures the text between the 2nd and 3rd forward-slash
+   private void setSource() {
+      String tempSource = "";
+      char character;
+      int slashes = 0;
+
+      // for each char in the url
+      for (int i = 0; i < url.length(); i++) {
+         character = url.charAt(i);
+         if (character == '/') {
+            slashes++;
+            // skips adding the second slash to the source
+            if (slashes == 2) {
+               i++;
+               character = url.charAt(i);
+            }
+         }
+         // while you stil haven't encountered the 3rd slash
+         if (slashes == 2) {
+            tempSource += character;
+         }
+      }
+
+      source = tempSource;
    }
 
    public void setCommonWord1(String word1) {
@@ -118,4 +163,8 @@ public class Article {
    public void setDate(Date date) {
       this.date = date;
    }
+
+   public void setRelatednesScore(Float score) {this.relatednesScore = score;}
+
+   public Float getRelatednesScore() {return relatednesScore;}
 }

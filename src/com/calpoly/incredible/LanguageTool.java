@@ -8,13 +8,13 @@ import com.mashape.unirest.http.Unirest;
  */
 public final class LanguageTool {
 
-    public static double getPercentError(String body) throws Exception {
+    public static void getPercentError(Article article) throws Exception {
         HttpResponse<String> spelling = Unirest.post("https://dnaber-languagetool.p.mashape.com/v2/check")
                 .header("X-Mashape-Key", "6mHWrpJfngmshbsZcedi1XmR2Urbp1kHUCgjsnctb0yJ4Ezskf")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .header("Accept", "text/plain")
                 .field("language", "en-US")
-                .field("text", body)
+                .field("text", article.getBody())
                 .asString();
 
         //count number of mistakes
@@ -29,16 +29,13 @@ public final class LanguageTool {
                 lastIndex += findStr.length();
             }
         }
-        System.out.println("There were " + count + " errors");
 
         //get number of words
         String wordcount = spelling.getHeaders().get("Content-Length").toString();
-        System.out.println("Number of words is " + wordcount);
         wordcount = wordcount.substring(1, wordcount.length() - 1);
         int words = Integer.parseInt(wordcount);
         double errorPercentage = (double) count / (double) words;
-        System.out.println("Percentage of error is " + errorPercentage);
 
-        return errorPercentage;
+        article.setPercentError(errorPercentage);
     }
 }
