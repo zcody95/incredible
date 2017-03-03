@@ -216,10 +216,12 @@ public class Bing {
     }
 
     /**
-     * This sorts the results list by date, going from farthest in the past to most recent for order.
+     * This sorts the results list by distance from the date of the original article.
      * @pre This should be called after search() to ensure the results are populated.
      */
-    public void sortByDate() {
+    public void sortByDate(Date articleDate) {
+        final long time = articleDate.getTime();
+
         Comparator<BingResult> compareBing = new Comparator<BingResult>() {
             public int compare(BingResult o1, BingResult o2) {
                 Date date1 = new Date(Integer.parseInt(o1.datePublished.substring(0, 4)),
@@ -228,24 +230,18 @@ public class Bing {
                 Date date2 = new Date(Integer.parseInt(o2.datePublished.substring(0, 4)),
                         Integer.parseInt(o2.datePublished.substring(5, 7)),
                         Integer.parseInt(o2.datePublished.substring(8, 10)));
-                if (date1.getYear() == date2.getMonth() && date1.getMonth() == date2.getMonth() &&
-                        date1.getDate() == date2.getDate())
+                long difference1 = abs(date1.getTime() - time);
+                long differnece2 = abs(date2.getTime() - time);
+
+                if (difference1 == differnece2)
                     return 0;
-                else if (date1.after(date2))
-                    return 1;
-                else
+                else if (difference1 < differnece2)
                     return -1;
+                else
+                    return 1;
             }
         };
 
         Collections.sort(results, compareBing);
-    }
-
-    /**
-     * Get the 5 articles published closest to the date of the original article.
-     * @pre call search(), and then call sortByDate() before this.
-     */
-    public void get5ResultsWithClosestDate() {
-
     }
 }

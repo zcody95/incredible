@@ -50,12 +50,14 @@ public final class RawScoreCalculator {
             Bing bing = new Bing();
             //find comparable articles
             bing.search(article.getTitle());
-            //find dates of comparable articles
+            //find similar dates of comparable articles
             ArrayList<Integer> dates = bing.getDates(article.getDate());
             article.setNumArticlesSameMonth(dates.get(0));
             article.setNumArticlesSameWeek(dates.get(1));
             article.setNumArticlesSameDay(dates.get(2));
-            bing.sortByDate();
+            //sort the bing result by distance from original date. The first 5 are the closest to orignal date
+            //which we will add semantic relatedness to.
+            bing.sortByDate(article.getDate());
         } catch (Exception e) {
             System.out.println("Exception getting dates from related Bing articles. ");
             e.printStackTrace();
