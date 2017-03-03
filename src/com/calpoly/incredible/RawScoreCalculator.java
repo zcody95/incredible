@@ -46,6 +46,19 @@ public final class RawScoreCalculator {
             e.printStackTrace();
         }
 
+        try {
+            Bing bing = new Bing();
+            //find comparable articles
+            bing.search(article.getTitle());
+            //find dates of comparable articles
+            ArrayList<Integer> dates = bing.getDates(article.getDate());
+            article.setNumArticlesSameMonth(dates.get(0));
+            article.setNumArticlesSameWeek(dates.get(1));
+            article.setNumArticlesSameDay(dates.get(2));
+        } catch (Exception e) {
+            System.out.println("Exception getting dates from related Bing articles. ");
+            e.printStackTrace();
+        }
     }
 
 //    HttpResponse<JsonNode> response;

@@ -20,6 +20,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
+import static java.lang.StrictMath.abs;
+
 /**
  * Used for querying the Bing News Search API.
  */
@@ -30,6 +32,12 @@ public class Bing {
 
     // The default number of results to get
     private static final int NUM_RESULTS = 25;
+
+    // The number of article published at these times compared to original article.
+    // Call search and then getDates before accessing.
+    private int sameDay = 0;
+    private int sameWeek = 0;
+    private int sameMonth = 0;
 
     /**
      * The articles that are the result of running the search.
@@ -65,7 +73,7 @@ public class Bing {
 
     /**
      * Search news articles using the Bing search engine.
-     * Returns 5 results.
+     * Returns 25 results.
      *
      * @param search the search query
      */
@@ -145,5 +153,58 @@ public class Bing {
                 return name;
             }
         }
+    }
+
+    /**
+     * Get all of the dates of the articles related to our topic.
+     * Stores the dates of articles by publication in same day, same week, and same month of original article.
+     * Articles with more results closer to the original articles publication date are more credible. Anything published
+     * more than a month before is likely outdated news.
+     *
+     * @param originalDate the date of the orignal articles publication.
+     * @return and Array containing [number of articles published same month, number of articles published same week,
+     * number of articles published same day]
+     */
+    public ArrayList<Integer> getDates(Date originalDate) {
+        ArrayList<String> dates = new ArrayList<String>();
+        //get all the dates from similar articles
+        for (BingResult result : results) {
+            int year = Integer.parseInt(result.datePublished.substring(0, 4));
+            int month = Integer.parseInt(result.datePublished.substring(5, 7));
+            int day = Integer.parseInt(result.datePublished.substring(8, 10));
+
+            //check if date was in same year
+            if (originalDate.getYear() == year ||  //same year
+                    (originalDate.getYear() == year - 1  && originalDate.getMonth() == 1 && month == 12) || //year before, but one is january and one is december
+                    (year == originalDate.getYear() - 1  && month == 1 && originalDate.getMonth() == 12)) {
+
+                //check if in the same month or 30 days before
+                if (originalDate.getMonth() == month ||  //same month
+                        (originalDate.getMonth() == month - 1  &&  originalDate.getDate() < day) || //one is pervious month, but less than 30 days apart
+                        (originalDate.getMonth() - 1 == month  &&  originalDate.getDate() > day) ||
+                        (originalDate.getMonth() == 1 && month == 12 && originalDate.getDate() < day) || //one is january, one is december, less than 30 days apart
+                        (originalDate.getMonth() == 12 && month == 1 && originalDate.getDate() > day)) {
+                    sameMonth++;
+
+                    //check if same week
+                    if (abs(originalDate.getDate() - day) <= 7 || abs(day - originalDate.getDate()) <= 7) { //less than 7 days apart
+                        sameMonth--;
+                        sameWeek++;
+
+                        //check if same day
+                        if (originalDate.getYear() == year && originalDate.getMonth() == month &&
+                                originalDate.getDate() == day) {
+                            sameWeek--;
+                            sameDay++;
+                        }
+                    }
+                }
+            }
+        }
+        ArrayList<Integer> theDates = new ArrayList<Integer>();
+        theDates.add(sameMonth);
+        theDates.add(sameWeek);
+        theDates.add(sameDay);
+        return theDates;
     }
 }

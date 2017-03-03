@@ -20,6 +20,9 @@ public class Article {
    private String commonSentence2;
    private String commonSentence3;
    private Date date;
+   private int numArticlesSameMonth;
+   private int numArticlesSameWeek;
+   private int numArticlesSameDay;
 
    /*
     * Constructor for an Article takes in the url of the article.
@@ -35,9 +38,12 @@ public class Article {
       commonSentence1 = "";
       commonSentence2 = "";
       commonSentence3 = "";
-      date = null;
+      date = new Date(2017, 2, 24); //temporary setting date to today until we get actual aricles date
       body = "";
       source = "";
+      numArticlesSameMonth = 0;
+      numArticlesSameWeek = 0;
+      numArticlesSameDay = 0;
    }
 
    @Override
@@ -48,7 +54,8 @@ public class Article {
               commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + "|" +
               "[" + commonSentence1 + ".," + commonSentence2 + ".," + commonSentence3 + ".]" + "|" +
               percentError + "|" +
-              relatednesScore + "|";
+              relatednesScore + "|" +
+              numArticlesSameMonth + "|" + numArticlesSameWeek + "|" + numArticlesSameDay + "|" ;
    }
 
    /*
@@ -129,6 +136,21 @@ public class Article {
       return date;
    }
 
+   /*
+    * @return the number of similar articles published in the same month.
+    */
+   public Integer getNumArticlesSameMonth() { return numArticlesSameMonth; }
+
+   /*
+    * @return the number of similar articles published in the same week.
+    */
+   public Integer getNumArticlesSameWeek() { return numArticlesSameWeek; }
+
+   /*
+    * @return the number of similar articles published in the same day.
+    */
+   public Integer getNumArticlesSameDay() { return numArticlesSameDay; }
+
    public void setBody(String body) { this.body = body; }
 
    public String getBody() { return body; }
@@ -197,6 +219,12 @@ public class Article {
    public void setDate(Date date) {
       this.date = date;
    }
+
+   public void setNumArticlesSameMonth(int sameMonth) { numArticlesSameMonth = sameMonth; }
+
+   public void setNumArticlesSameWeek(int sameWeek) { numArticlesSameWeek = sameWeek; }
+
+   public void  setNumArticlesSameDay(int sameDay) { numArticlesSameDay = sameDay; }
 
    public void setRelatednesScore(Float score) {this.relatednesScore = score;}
 
