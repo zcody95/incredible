@@ -38,7 +38,7 @@ public class Article {
       commonSentence1 = "";
       commonSentence2 = "";
       commonSentence3 = "";
-      date = new Date(2017, 2, 24); //temporary setting date to today until we get actual aricles date
+      date = null;
       body = "";
       source = "";
       numArticlesSameMonth = 0;

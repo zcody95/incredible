@@ -214,6 +214,10 @@ public class Bing {
         return theDates;
     }
 
+    /**
+     * This sorts the results list by date, going from farthest in the past to most recent for order.
+     * This should be called after search() to ensure the results are populated.
+     */
     public void sortByDate() {
         Comparator<BingResult> compareBing = new Comparator<BingResult>() {
             public int compare(BingResult o1, BingResult o2) {
@@ -234,5 +238,9 @@ public class Bing {
         };
 
         Collections.sort(results, compareBing);
+    }
+
+    public void get5ResultsWithClosestDate() {
+
     }
 }

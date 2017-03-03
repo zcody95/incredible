@@ -5,6 +5,8 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by Jenna on 3/1/17.
  * Textuality API
@@ -25,6 +27,13 @@ public final class Textuality {
         //get the title
         article.setTitle(response.getBody().getObject().get("title").toString());
         article.setBody(response.getBody().getObject().get("content").toString());
+
+        //get the date of the article
+        String date = response.getBody().getObject().get("stamp").toString();
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(5, 7));
+        int day  = Integer.parseInt(date.substring(8, 10));
+        article.setDate(new Date(year, month, day));
     }
 
 }
