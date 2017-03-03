@@ -55,6 +55,7 @@ public final class RawScoreCalculator {
             article.setNumArticlesSameMonth(dates.get(0));
             article.setNumArticlesSameWeek(dates.get(1));
             article.setNumArticlesSameDay(dates.get(2));
+            bing.sortByDate();
         } catch (Exception e) {
             System.out.println("Exception getting dates from related Bing articles. ");
             e.printStackTrace();

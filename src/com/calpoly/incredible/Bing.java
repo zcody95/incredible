@@ -15,6 +15,8 @@ import com.sun.org.apache.xml.internal.security.c14n.implementations.UtfHelpper;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -45,6 +47,8 @@ public class Bing {
      * @pre MUST CALL SEARCH BEFORE ACCESSING
      */
     public static ArrayList<BingResult> results = new ArrayList();
+
+    public static ArrayList<BingResult> resultsWithClosestDate = new ArrayList();
 
     /**
      * Search news articles using the Bing search engine.
@@ -167,6 +171,7 @@ public class Bing {
      */
     public ArrayList<Integer> getDates(Date originalDate) {
         ArrayList<String> dates = new ArrayList<String>();
+
         //get all the dates from similar articles
         for (BingResult result : results) {
             int year = Integer.parseInt(result.datePublished.substring(0, 4));
@@ -201,10 +206,33 @@ public class Bing {
                 }
             }
         }
+
         ArrayList<Integer> theDates = new ArrayList<Integer>();
         theDates.add(sameMonth);
         theDates.add(sameWeek);
         theDates.add(sameDay);
         return theDates;
+    }
+
+    public void sortByDate() {
+        Comparator<BingResult> compareBing = new Comparator<BingResult>() {
+            public int compare(BingResult o1, BingResult o2) {
+                Date date1 = new Date(Integer.parseInt(o1.datePublished.substring(0, 4)),
+                        Integer.parseInt(o1.datePublished.substring(5, 7)),
+                        Integer.parseInt(o1.datePublished.substring(8, 10)));
+                Date date2 = new Date(Integer.parseInt(o2.datePublished.substring(0, 4)),
+                        Integer.parseInt(o2.datePublished.substring(5, 7)),
+                        Integer.parseInt(o2.datePublished.substring(8, 10)));
+                if (date1.getYear() == date2.getMonth() && date1.getMonth() == date2.getMonth() &&
+                        date1.getDate() == date2.getDate())
+                    return 0;
+                else if (date1.after(date2))
+                    return 1;
+                else
+                    return -1;
+            }
+        };
+
+        Collections.sort(results, compareBing);
     }
 }
