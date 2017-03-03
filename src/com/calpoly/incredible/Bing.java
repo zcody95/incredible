@@ -37,9 +37,9 @@ public class Bing {
 
     // The number of article published at these times compared to original article.
     // Call search and then getDates before accessing.
-    private int sameDay = 0;
-    private int sameWeek = 0;
-    private int sameMonth = 0;
+    private static int sameDay = 0;
+    private static int sameWeek = 0;
+    private static int sameMonth = 0;
 
     /**
      * The articles that are the result of running the search.
@@ -170,7 +170,7 @@ public class Bing {
      * @return and Array containing [number of articles published same month, number of articles published same week,
      * number of articles published same day]
      */
-    public ArrayList<Integer> getDates(Date originalDate) {
+    public static ArrayList<Integer> getDates(Date originalDate) {
         ArrayList<String> dates = new ArrayList<String>();
 
         //get all the dates from similar articles
@@ -219,7 +219,7 @@ public class Bing {
      * This sorts the results list by distance from the date of the original article.
      * @pre This should be called after search() to ensure the results are populated.
      */
-    public void sortByDate(Date articleDate) {
+    public static void sortByDate(Date articleDate) {
         final long time = articleDate.getTime();
 
         Comparator<BingResult> compareBing = new Comparator<BingResult>() {

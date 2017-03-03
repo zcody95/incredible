@@ -8,7 +8,7 @@ import java.util.Date;
 public class Article {
    private double credibilityScore;
    private double percentError;
-   private float relatednesScore;
+   private float[] relatednessScore = new float[5];
    private String title;
    private String body;
    private String url;
@@ -20,6 +20,7 @@ public class Article {
    private String commonSentence2;
    private String commonSentence3;
    private Date date;
+   private double sentiment;
    private int numArticlesSameMonth;
    private int numArticlesSameWeek;
    private int numArticlesSameDay;
@@ -49,13 +50,14 @@ public class Article {
    @Override
    public String toString() {
 
-      return  source + "|" +
-              url + "|" + "[" +
-              commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + "|" +
-              "[" + commonSentence1 + ".," + commonSentence2 + ".," + commonSentence3 + ".]" + "|" +
-              percentError + "|" +
-              relatednesScore + "|" +
-              numArticlesSameMonth + "|" + numArticlesSameWeek + "|" + numArticlesSameDay + "|" ;
+      return  source + ";" +
+              url + ";" + "[" +
+              commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + ";" +
+              percentError + ";" + sentiment + ";" +
+              numArticlesSameMonth + ";" + numArticlesSameWeek + ";" + numArticlesSameDay + ";" +
+              relatednessScore[0] + ";" + relatednessScore[1] + ";" +
+              relatednessScore[2] + ";" + relatednessScore[3] + ";" +
+              relatednessScore[4];
    }
 
    /*
@@ -226,7 +228,17 @@ public class Article {
 
    public void  setNumArticlesSameDay(int sameDay) { numArticlesSameDay = sameDay; }
 
-   public void setRelatednesScore(Float score) {this.relatednesScore = score;}
+   public void setRelatednessScore(float score, int index) {
+      relatednessScore[index] = score;
+   }
 
-   public Float getRelatednesScore() {return relatednesScore;}
+   public float getRelatednesScores(int index) {return relatednessScore[index];}
+
+   public void setSentiment(double senti) {
+      sentiment = senti;
+   }
+
+   public double getSentiment() {
+      return sentiment;
+   }
 }

@@ -30,14 +30,6 @@ public final class RawScoreCalculator {
             e.printStackTrace();
         }
 
-        // Calculated the relatedness of the title to another article's
-        try {
-            SemanticRelatedness.setSemanticRelatedness(url, article, "Second Article goes here");
-        } catch (Exception e) {
-            System.out.println("Semantic relatedness Exception during post: ");
-            e.printStackTrace();
-        }
-
         // Check the grammer and spelling on the article
         try {
             LanguageTool.getPercentError(article);
@@ -47,17 +39,23 @@ public final class RawScoreCalculator {
         }
 
         try {
-            Bing bing = new Bing();
             //find comparable articles
-            bing.search(article.getTitle());
+            Bing.search(article.getTitle());
+
+            //Google sentiment
+            article.setSentiment(GoogleSentiment.sentiment(article.getBody()));
+
             //find similar dates of comparable articles
-            ArrayList<Integer> dates = bing.getDates(article.getDate());
+            ArrayList<Integer> dates = Bing.getDates(article.getDate());
             article.setNumArticlesSameMonth(dates.get(0));
             article.setNumArticlesSameWeek(dates.get(1));
             article.setNumArticlesSameDay(dates.get(2));
             //sort the bing result by distance from original date. The first 5 are the closest to orignal date
             //which we will add semantic relatedness to.
-            bing.sortByDate(article.getDate());
+            Bing.sortByDate(article.getDate());
+            for (int ind = 0; ind < 5; ind++) {
+                article.setRelatednessScore(Bing.relatedness(article.getBody(),ind), ind);
+            }
         } catch (Exception e) {
             System.out.println("Exception getting dates from related Bing articles. ");
             e.printStackTrace();
