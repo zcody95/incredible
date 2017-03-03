@@ -165,6 +165,7 @@ public class Bing {
      * Articles with more results closer to the original articles publication date are more credible. Anything published
      * more than a month before is likely outdated news.
      *
+     * @pre Call search() before calling this, to ensure results are populated
      * @param originalDate the date of the orignal articles publication.
      * @return and Array containing [number of articles published same month, number of articles published same week,
      * number of articles published same day]
@@ -216,7 +217,7 @@ public class Bing {
 
     /**
      * This sorts the results list by date, going from farthest in the past to most recent for order.
-     * This should be called after search() to ensure the results are populated.
+     * @pre This should be called after search() to ensure the results are populated.
      */
     public void sortByDate() {
         Comparator<BingResult> compareBing = new Comparator<BingResult>() {
@@ -240,6 +241,10 @@ public class Bing {
         Collections.sort(results, compareBing);
     }
 
+    /**
+     * Get the 5 articles published closest to the date of the original article.
+     * @pre call search(), and then call sortByDate() before this.
+     */
     public void get5ResultsWithClosestDate() {
 
     }
