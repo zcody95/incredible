@@ -49,15 +49,16 @@ public class Article {
 
    @Override
    public String toString() {
-
-      return  source + ";" +
+      String result = source + ";" +
               url + ";" + "[" +
               commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + ";" +
               percentError + ";" + sentiment + ";" +
-              numArticlesSameMonth + ";" + numArticlesSameWeek + ";" + numArticlesSameDay + ";" +
-              relatednessScore[0] + ";" + relatednessScore[1] + ";" +
-              relatednessScore[2] + ";" + relatednessScore[3] + ";" +
-              relatednessScore[4];
+              numArticlesSameMonth + ";" + numArticlesSameWeek + ";" + numArticlesSameDay;
+      for (int ind =0; ind< relatednessScore.length; ind++) {
+         result += ";" + relatednessScore[ind];
+      }
+
+      return result;
    }
 
    /*

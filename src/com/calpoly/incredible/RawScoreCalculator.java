@@ -53,7 +53,7 @@ public final class RawScoreCalculator {
             //sort the bing result by distance from original date. The first 5 are the closest to orignal date
             //which we will add semantic relatedness to.
             Bing.sortByDate(article.getDate());
-            for (int ind = 0; ind < 5; ind++) {
+            for (int ind = 0; ind < Math.min(5, Bing.results.size()); ind++) {
                 article.setRelatednessScore(Bing.relatedness(article.getBody(),ind), ind);
             }
         } catch (Exception e) {
