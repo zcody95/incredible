@@ -61,6 +61,21 @@ public class Article {
       return result;
    }
 
+   public String printAll() {
+      return "SOURCE: " + source + "\n"
+              + "COMMON WORDS: [" + commonWord1 + "," + commonWord2 + "," + commonWord3 + "]\n"
+              + "PERCENT ERROR: " + percentError + "\n"
+              + "SENTIMENT: " + sentiment + "\n"
+              + "NUMBER ARTICLES MONTH: " + numArticlesSameMonth + "\n"
+              + "NUMBER ARTICLES WEEK: " + numArticlesSameWeek + "\n"
+              + "NUMBER ARTICLES DAY: " + numArticlesSameDay + "\n"
+              + "RELATEDNESS SCORE 1: " + relatednessScore[0] + "\n"
+              + "RELATEDNESS SCORE 2: " + relatednessScore[1] + "\n"
+              + "RELATEDNESS SCORE 3: " + relatednessScore[2] + "\n"
+              + "RELATEDNESS SCORE 4: " + relatednessScore[3] + "\n"
+              + "RELATEDNESS SCORE 5: " + relatednessScore[4] + "\n";
+   }
+
    /*
     * @return the credibility score of the article.
     */
