@@ -48,13 +48,37 @@ public class Incredible {
          return;
       }
 
-      // Calculate Raw Score
       String url = args[0];
-      article = new Article();
-      article.setUrl(url);
-      RawScoreCalculator.calculateRawScore(url, article);
-      System.out.println(article.toString());
+      System.out.println("Calculating score. This may take a minute...");
 
+      boolean repeat = true;
+      while (repeat) {
+         // Calculate Raw Score
+         article = new Article();
+         article.setUrl(url);
+         RawScoreCalculator.calculateRawScore(url, article);
+         System.out.println(article.toString());
+         System.out.println("Was I right? (y/n or e to exit)");
+         Scanner s = new Scanner(System.in);
+         boolean validAnswer = true;
+         while (validAnswer) {
+            String next = s.next();
+            if (next.equals("y") || next.equals("Y")) {
+               validAnswer = false;
+               System.out.println("Please enter another url.");
+               url = s.next();
+               System.out.println("Calculating score. This may take a minute...");
+            } else if (next.equals("n") || next.equals("N")) {
+               System.out.println("Recalculating algorithm and trying again. This may take a minute...");
+               validAnswer = false;
+            } else  if (next.equals("e") || next.equals("E")) {
+               repeat = false;
+               validAnswer = false;
+            } else {
+               System.out.println("Enter y(es) or n(o) or e(xit)");
+            }
+         }
+      }
       // Compare to other articles
 
       // Display results
