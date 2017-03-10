@@ -3,10 +3,6 @@ package com.calpoly.incredible;
 // Include the following imports to use table APIs
 import com.microsoft.azure.storage.*;
 import com.microsoft.azure.storage.table.*;
-import com.microsoft.azure.storage.table.TableQuery.*;
-
-import javax.xml.transform.Source;
-
 
 /**
  * Created by Zack Cody on 3/8/2017.
@@ -79,6 +75,44 @@ public class Backend {
 
             if (specificSource != null) {
                 System.out.println("NAME: " + specificSource.getPartitionKey() + "\nSCORE: " + specificSource.getScore() + "\nNUM_ARTICLES: " + specificSource.getNumArticles());
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void insertNewWeight(String name, double value) {
+        String weightTable = "Weight";
+
+        try {
+            CloudTable newTable = client.getTableReference(weightTable);
+
+            WeightEntity newWeight = new WeightEntity(name);
+            newWeight.setValue(value);
+
+            TableOperation insertWeight = TableOperation.insertOrReplace(newWeight);
+
+            newTable.execute(insertWeight);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void getWeight(String name) {
+        String weightTableName = "Weight";
+        String rowKey = "incredible";
+
+        try {
+            CloudTable weightTable = client.getTableReference(weightTableName);
+
+            TableOperation retrieveWeight = TableOperation.retrieve(name, rowKey, WeightEntity.class);
+
+            WeightEntity specificWeight = weightTable.execute(retrieveWeight).getResultAsType();
+
+            if (specificWeight != null) {
+                System.out.println("NAME: " + specificWeight.getPartitionKey() + "\nVALUE: " + specificWeight.getValue());
             }
         }
         catch (Exception ex) {

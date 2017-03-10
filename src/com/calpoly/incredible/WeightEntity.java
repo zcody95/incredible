@@ -1,7 +1,7 @@
 package com.calpoly.incredible;
 
 /**
- * Created by ZAKCO_000 on 3/8/2017.
+ * Created by Zack Cody on 3/8/2017.
  */
 public class WeightEntity extends SourceEntity {
     private String name;
