@@ -8,19 +8,12 @@ import java.util.Date;
 public class Article {
    private double credibilityScore;
    private double percentError;
-   private float[] relatednessScore = new float[5];
+   private float relatednessScore;
    private String title;
    private String body;
    private String url;
    private String source;
-   private String commonWord1;
-   private String commonWord2;
-   private String commonWord3;
-   private String commonSentence1;
-   private String commonSentence2;
-   private String commonSentence3;
    private Date date;
-   private double sentiment;
    private int numArticlesSameMonth;
    private int numArticlesSameWeek;
    private int numArticlesSameDay;
@@ -33,12 +26,6 @@ public class Article {
       credibilityScore = 0.0;
       percentError = 0.0;
       title = "";
-      commonWord1 = "";
-      commonWord2 = "";
-      commonWord3 = "";
-      commonSentence1 = "";
-      commonSentence2 = "";
-      commonSentence3 = "";
       date = null;
       body = "";
       source = "";
@@ -50,45 +37,21 @@ public class Article {
    @Override
    public String toString() {
       String result = source + ";" +
-              url + ";" + "[" +
-              commonWord1 + "," + commonWord2 + "," + commonWord3 + "]" + ";" +
-              percentError + ";" + sentiment + ";" +
-              numArticlesSameMonth + ";" + numArticlesSameWeek + ";" + numArticlesSameDay;
-      for (int ind =0; ind< relatednessScore.length; ind++) {
-         result += ";" + relatednessScore[ind];
-      }
+              url + ";" +
+              percentError + ";" +
+              numArticlesSameMonth + ";" + numArticlesSameWeek + ";" + numArticlesSameDay + ";" +
+              relatednessScore;
 
       return result;
    }
 
    public String printAll() {
       return "SOURCE: " + source + "\n"
-              + "COMMON WORDS: [" + commonWord1 + "," + commonWord2 + "," + commonWord3 + "]\n"
               + "PERCENT ERROR: " + percentError + "\n"
-              + "SENTIMENT: " + sentiment + "\n"
               + "NUMBER ARTICLES MONTH: " + numArticlesSameMonth + "\n"
               + "NUMBER ARTICLES WEEK: " + numArticlesSameWeek + "\n"
               + "NUMBER ARTICLES DAY: " + numArticlesSameDay + "\n"
-              + "RELATEDNESS SCORE 1: " + relatednessScore[0] + "\n"
-              + "RELATEDNESS SCORE 2: " + relatednessScore[1] + "\n"
-              + "RELATEDNESS SCORE 3: " + relatednessScore[2] + "\n"
-              + "RELATEDNESS SCORE 4: " + relatednessScore[3] + "\n"
-              + "RELATEDNESS SCORE 5: " + relatednessScore[4] + "\n";
-   }
-
-   /*
-    * @return the credibility score of the article.
-    */
-   public double getCredibilityScore() {
-      return credibilityScore;
-   }
-
-   /*
-    * @return the percentage of grammatical errors and spelling errors in
-    * the article. Calculated by (total errors) / (word count)
-    */
-   public double getPercentError() {
-      return percentError;
+              + "RELATEDNESS SCORE 1: " + relatednessScore + "\n";
    }
 
    /*
@@ -103,48 +66,6 @@ public class Article {
     */
    public String getUrl() {
       return url;
-   }
-
-   /*
-    * @return the most common used word in the article.
-    */
-   public String getCommonWord1() {
-      return commonWord1;
-   }
-
-   /*
-    * @return the second most common used word in the article.
-    */
-   public String getCommonWord2() {
-      return commonWord2;
-   }
-
-   /*
-    * @return the third most common used term in the article.
-    */
-   public String getCommonWord3() {
-      return commonWord3;
-   }
-
-   /*
-    * @return the sentence with the most common words used in it.
-    */
-   public String getCommonSentence1() {
-      return commonSentence1;
-   }
-
-   /*
-    * @return the sentence with the most common words used in it.
-    */
-   public String getCommonSentence2() {
-      return commonSentence2;
-   }
-
-   /*
-    * @return the sentence with the most common words used in it.
-    */
-   public String getCommonSentence3() {
-      return commonSentence3;
    }
 
    /*
@@ -216,24 +137,6 @@ public class Article {
       source = tempSource;
    }
 
-   public void setCommonWord1(String word1) {
-      commonWord1 = word1;
-   }
-
-   public void setCommonWord2(String word2) {
-      commonWord2 = word2;
-   }
-
-   public void setCommonWord3(String word3) {
-      commonWord3 = word3;
-   }
-
-   public void setCommonSentence1(String sentence1) {commonSentence1 = sentence1; };
-
-   public void setCommonSentence2(String sentence2) {commonSentence2 = sentence2; };
-
-   public void setCommonSentence3(String sentence3) {commonSentence3 = sentence3; };
-
    public void setDate(Date date) {
       this.date = date;
    }
@@ -244,17 +147,9 @@ public class Article {
 
    public void  setNumArticlesSameDay(int sameDay) { numArticlesSameDay = sameDay; }
 
-   public void setRelatednessScore(float score, int index) {
-      relatednessScore[index] = score;
+   public void setRelatednessScore(float score) {
+      relatednessScore = score;
    }
 
-   public float getRelatednesScores(int index) {return relatednessScore[index];}
-
-   public void setSentiment(double senti) {
-      sentiment = senti;
-   }
-
-   public double getSentiment() {
-      return sentiment;
-   }
+   public float getRelatednesScores() {return relatednessScore;}
 }
