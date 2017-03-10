@@ -48,8 +48,6 @@ public class Bing {
      */
     public static ArrayList<BingResult> results = new ArrayList();
 
-    public static BingResult resultsWithClosestDate;
-
     /**
      * Search news articles using the Bing search engine.
      *

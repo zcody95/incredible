@@ -12,14 +12,14 @@ import java.util.ArrayList;
  */
 public final class RawScoreCalculator {
 
-    public static void calculateRawScore(String url, Article article) {
+    public static void calculateRawScore(String url, Article article) throws Exception{
 
         // Extract the Title and Body of text for the article
         try {
             Textuality.setTextElements(url, article);
         } catch (Exception e) {
             System.out.println("Textuality Exception during post: ");
-            e.printStackTrace();
+            throw e;
         }
 
         try {
@@ -28,7 +28,6 @@ public final class RawScoreCalculator {
 
             //find similar dates of comparable articles
             ArrayList<Integer> dates = Bing.getDates(article.getDate());
-            article.setNumArticlesSameMonth(dates.get(0));
             article.setNumArticlesSameWeek(dates.get(1));
             article.setNumArticlesSameDay(dates.get(2));
             //sort the bing result by distance from original date. The first 5 are the closest to orignal date
@@ -37,7 +36,7 @@ public final class RawScoreCalculator {
             article.setRelatednessScore(Bing.relatedness(article.getBody(), Bing.results.get(0).description));
         } catch (Exception e) {
             System.out.println("Exception getting dates from related Bing articles. ");
-            e.printStackTrace();
+            throw e;
         }
     }
 

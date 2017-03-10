@@ -17,20 +17,21 @@ public class Backend {
     private static CloudStorageAccount storageAccount = null;
     private static CloudTableClient client = null;
 
-    public static void connectToBackend() {
+    public static void connectToBackend() throws Exception{
         try
         {
             // Retrieve storage account from connection-string.
             storageAccount =
                     CloudStorageAccount.parse(storageConnectionString);
             client = storageAccount.createCloudTableClient();
+            System.out.println("STORAGE ACCOUNT: " + storageAccount.toString());
         }
         catch (Exception e)
         {
             // Output the stack trace.
-            e.printStackTrace();
+            System.out.println("Could not connect");
+            throw e;
         }
-        System.out.println("STORAGE ACCOUNT: " + storageAccount.toString());
     }
 
     public static void createNewTable(String tableName) {
@@ -43,7 +44,7 @@ public class Backend {
         }
     }
 
-    public static void insertNewSource(String name, double score, int numArticles) {
+    public static void insertNewSource(String name, double score, int numArticles) throws Exception {
         String sourceTable = "Source";
 
         try {
@@ -58,27 +59,33 @@ public class Backend {
             newTable.execute(insertSource);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Could not update source");
+            throw ex;
         }
     }
 
-    public static void getSource(String name) {
+    public static void getSource(Article article)  throws Exception{
         String sourceTableName = "Source";
         String rowKey = "incredible";
 
         try {
             CloudTable sourceTable = client.getTableReference(sourceTableName);
 
-            TableOperation retrieveSource = TableOperation.retrieve(name, rowKey, SourceEntity.class);
+            TableOperation retrieveSource = TableOperation.retrieve(article.getSource(), rowKey, SourceEntity.class);
 
             SourceEntity specificSource = sourceTable.execute(retrieveSource).getResultAsType();
 
             if (specificSource != null) {
-                System.out.println("NAME: " + specificSource.getPartitionKey() + "\nSCORE: " + specificSource.getScore() + "\nNUM_ARTICLES: " + specificSource.getNumArticles());
+                article.setSourceScore(((float) specificSource.getScore()));
+                article.setTotal(specificSource.getNumArticles() + 1);
+            }
+            else {
+                article.setTotal(1);
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Couldn't get source.");
+            throw ex;
         }
     }
 

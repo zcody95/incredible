@@ -42,42 +42,49 @@ public class Incredible {
 //         e.printStackTrace();
 //      }
 
-      //check that the user passed in a url for the APIs 
-      if (!(args.length >= 1)) {
-         System.out.println("ERROR: Must provide a url.");
-         return;
-      }
+      System.out.println("Enter a url:");
 
-      String url = args[0];
-      System.out.println("Calculating score. This may take a minute...");
+      try {
+         Scanner s = new Scanner(System.in);
+         String next = s.next();
 
-      boolean repeat = true;
-      while (repeat) {
          // Calculate Raw Score
          article = new Article();
-         article.setUrl(url);
-         RawScoreCalculator.calculateRawScore(url, article);
-         System.out.println(article.toString());
-         System.out.println("Was I right? (y/n or e to exit)");
-         Scanner s = new Scanner(System.in);
-         boolean validAnswer = true;
-         while (validAnswer) {
-            String next = s.next();
-            if (next.equals("y") || next.equals("Y")) {
-               validAnswer = false;
-               System.out.println("Please enter another url.");
-               url = s.next();
-               System.out.println("Calculating score. This may take a minute...");
-            } else if (next.equals("n") || next.equals("N")) {
-               System.out.println("Recalculating algorithm and trying again. This may take a minute...");
-               validAnswer = false;
-            } else  if (next.equals("e") || next.equals("E")) {
-               repeat = false;
-               validAnswer = false;
-            } else {
-               System.out.println("Enter y(es) or n(o) or e(xit)");
-            }
+         article.setUrl(next);
+         RawScoreCalculator.calculateRawScore(next, article);
+         Backend.connectToBackend();
+         Backend.getSource(article);
+
+         float score;
+
+         System.out.println("Got article info");
+         System.out.println(article.printAll() + "\n\n");
+         //System.out.println(article.toString());
+         System.out.println("Is this article credible?");
+         next = s.next();
+         if (next.equals("y") || next.equals("Y")) {
+            System.out.println("Calculating score. This may take a minute...");
+            score = LearningAlgorithm.calculateLearn(article, true);
+            System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
+         } else if (next.equals("n") || next.equals("N")) {
+            System.out.println("Calculating score. This may take a minute...");
+            score = LearningAlgorithm.calculateLearn(article, false);
+            System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
+         } else {
+            System.out.println("Calculating score. This may take a minute...");
+            score = LearningAlgorithm.calculate(article);
          }
+         System.out.println("Updating Backend...");
+         if (article.getSourceScore() == -1) {
+            Backend.insertNewSource(article.getSource(), score, 1);
+         } else {
+            Backend.insertNewSource(article.getSource(), (score + article.getSourceScore() * (article.getTotal() - 1)) / article.getTotal(), article.getTotal());
+         }
+         System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
+      }
+      catch (Exception ex) {
+         ex.printStackTrace();
+         System.out.println("Could not compute score.");
       }
       // Compare to other articles
 

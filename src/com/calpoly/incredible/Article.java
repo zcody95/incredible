@@ -6,15 +6,14 @@ import java.util.Date;
  * @author roslynsierra
  */
 public class Article {
-   private double credibilityScore;
-   private double percentError;
    private float relatednessScore;
+   private float sourceScore = -1;
+   private int total = 1;
    private String title;
    private String body;
    private String url;
    private String source;
    private Date date;
-   private int numArticlesSameMonth;
    private int numArticlesSameWeek;
    private int numArticlesSameDay;
 
@@ -23,13 +22,10 @@ public class Article {
     * @param url the url of the article.
     */
    public Article() {
-      credibilityScore = 0.0;
-      percentError = 0.0;
       title = "";
       date = null;
       body = "";
       source = "";
-      numArticlesSameMonth = 0;
       numArticlesSameWeek = 0;
       numArticlesSameDay = 0;
    }
@@ -38,8 +34,7 @@ public class Article {
    public String toString() {
       String result = source + ";" +
               url + ";" +
-              percentError + ";" +
-              numArticlesSameMonth + ";" + numArticlesSameWeek + ";" + numArticlesSameDay + ";" +
+              numArticlesSameWeek + ";" + numArticlesSameDay + ";" +
               relatednessScore;
 
       return result;
@@ -47,8 +42,8 @@ public class Article {
 
    public String printAll() {
       return "SOURCE: " + source + "\n"
-              + "PERCENT ERROR: " + percentError + "\n"
-              + "NUMBER ARTICLES MONTH: " + numArticlesSameMonth + "\n"
+              + "TOTAL: " + total + "\n"
+              + "SOURCE SCORE: " + sourceScore + "\n"
               + "NUMBER ARTICLES WEEK: " + numArticlesSameWeek + "\n"
               + "NUMBER ARTICLES DAY: " + numArticlesSameDay + "\n"
               + "RELATEDNESS SCORE 1: " + relatednessScore + "\n";
@@ -76,11 +71,6 @@ public class Article {
    }
 
    /*
-    * @return the number of similar articles published in the same month.
-    */
-   public Integer getNumArticlesSameMonth() { return numArticlesSameMonth; }
-
-   /*
     * @return the number of similar articles published in the same week.
     */
    public Integer getNumArticlesSameWeek() { return numArticlesSameWeek; }
@@ -93,14 +83,6 @@ public class Article {
    public void setBody(String body) { this.body = body; }
 
    public String getBody() { return body; }
-
-   public void setCredibilityScore(double newScore) {
-      credibilityScore = newScore;
-   }
-
-   public void setPercentError(double error) {
-      percentError = error;
-   }
 
    public void setTitle(String title) {
       this.title = title;
@@ -141,8 +123,6 @@ public class Article {
       this.date = date;
    }
 
-   public void setNumArticlesSameMonth(int sameMonth) { numArticlesSameMonth = sameMonth; }
-
    public void setNumArticlesSameWeek(int sameWeek) { numArticlesSameWeek = sameWeek; }
 
    public void  setNumArticlesSameDay(int sameDay) { numArticlesSameDay = sameDay; }
@@ -152,4 +132,24 @@ public class Article {
    }
 
    public float getRelatednesScores() {return relatednessScore;}
+
+   public void setSourceScore(float src) {
+      sourceScore = src;
+   }
+
+   public float getSourceScore() {
+      return sourceScore;
+   }
+
+   public int getTotal() {
+      return total;
+   }
+
+   public void setTotal(int tot) {
+      total = tot;
+   }
+
+   public String getSource() {
+       return source;
+   }
 }
