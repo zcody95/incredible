@@ -23,15 +23,21 @@ public class LearningAlgorithm {
         initializeWeights();
         if (article.getSourceScore() == -1) {
             score = baseWeights.semWeight * article.getRelatednesScores()
-                    + baseWeights.weekWeight * (article.getNumArticlesSameWeek() / 25)
-                    + baseWeights.dayWeight * (article.getNumArticlesSameDay() / 25);
+                    + baseWeights.weekWeight * ((float)article.getNumArticlesSameWeek() / 25.0f)
+                    + baseWeights.dayWeight * ((float)article.getNumArticlesSameDay() / 25.0f);
+            System.out.println("Weights:\nSemWeights: " + baseWeights.semWeight
+                + "\nWeek: " + baseWeights.weekWeight
+                + "\nDay: " + baseWeights.dayWeight);
         }
         else {
             score = weights.semWeight * article.getRelatednesScores()
-                    + weights.srcWeight * article.getSourceScore()
-                    + weights.weekWeight * (article.getNumArticlesSameWeek() / 25)
-                    + weights.dayWeight * (article.getNumArticlesSameDay() / 25);
-
+                    + weights.srcWeight * (article.getSourceScore() / 100.0f)
+                    + weights.weekWeight * ((float)article.getNumArticlesSameWeek() / 25.0f)
+                    + weights.dayWeight * ((float)article.getNumArticlesSameDay() / 25.0f);
+            System.out.println("Weights:\nSemWeights: " + weights.semWeight
+                    + "\nSrc: " + weights.srcWeight
+                    + "\nWeek: " + weights.weekWeight
+                    + "\nDay: " + weights.dayWeight);
         }
 
         return score;
