@@ -28,20 +28,7 @@ public class Incredible {
     * in by the user.
     **/
    public static void main(String[] args) {
-      // Connects to the Azure Backend using JDBC
-//      try {
-//         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//         connectionUrl = "jdbc:sqlserver://incredibleserver17.database.windows.net:1433;database=IncredibleStorage;" +
-//            "user=aibackend@outlook.com@incredibleserver17;" +
-//            "password={Backend123!};encrypt=true;" +
-//            "trustServerCertificate=false;" +
-//            "hostNameInCertificate=*.database.windows.net;loginTimeo    ut=30;";
-//         con = DriverManager.getConnection(connectionUrl);
-//         System.out.println("Successfully connected to SQL database");
-//      }catch(Exception e) {
-//         e.printStackTrace();
-//      }
-
+      String sourceTable = "SourceTwo";
       System.out.println("Enter a url:");
 
       try {
@@ -53,7 +40,7 @@ public class Incredible {
          article.setUrl(next);
          RawScoreCalculator.calculateRawScore(next, article);
          Backend.connectToBackend();
-         Backend.getSource(article);
+         Backend.getSource(sourceTable, article);
 
          float score;
 
@@ -86,9 +73,9 @@ public class Incredible {
                newScore = cutoff - (score - cutoff) / article.getTotal();
             }
             if (article.getSourceScore() == -1) {
-               Backend.insertNewSource(article.getSource(), newScore, 1);
+               Backend.insertNewSource(sourceTable, article.getSource(), newScore, 1);
             } else {
-               Backend.insertNewSource(article.getSource(), (newScore + article.getSourceScore() * (article.getTotal() - 1)) / article.getTotal(), article.getTotal());
+               Backend.insertNewSource(sourceTable, article.getSource(), (newScore + article.getSourceScore() * (article.getTotal() - 1)) / article.getTotal(), article.getTotal());
             }
          }
 

@@ -4,6 +4,9 @@ package com.calpoly.incredible;
 import com.microsoft.azure.storage.*;
 import com.microsoft.azure.storage.table.*;
 
+import javax.xml.transform.Source;
+import java.util.ArrayList;
+
 /**
  * Created by Zack Cody on 3/8/2017.
  */
@@ -13,6 +16,7 @@ public class Backend {
             "DefaultEndpointsProtocol=http;" +
                     "AccountName=incrediblestorage;" +
                     "AccountKey=DtQhzOkOqby2ct+FYpwpTwI7ETkPqqyrKn1KtCjK6DMURS9G5z0Xfr0juAKr43d+2+GZElXZ4FUQnplU09rUPg==";
+    public static final String ROW_KEY = "incredible";
 
     private static CloudStorageAccount storageAccount = null;
     private static CloudTableClient client = null;
@@ -44,11 +48,9 @@ public class Backend {
         }
     }
 
-    public static void insertNewSource(String name, double score, int numArticles) throws Exception {
-        String sourceTable = "SourceTwo";
-
+    public static void insertNewSource(String tableName, String name, double score, int numArticles) throws Exception {
         try {
-            CloudTable newTable = client.getTableReference(sourceTable);
+            CloudTable newTable = client.getTableReference(tableName);
 
             SourceEntity newSource = new SourceEntity(name);
             newSource.setScore(score);
@@ -64,14 +66,11 @@ public class Backend {
         }
     }
 
-    public static void getSource(Article article)  throws Exception{
-        String sourceTableName = "SourceTwo";
-        String rowKey = "incredible";
-
+    public static void getSource(String tableName, Article article)  throws Exception{
         try {
-            CloudTable sourceTable = client.getTableReference(sourceTableName);
+            CloudTable sourceTable = client.getTableReference(tableName);
 
-            TableOperation retrieveSource = TableOperation.retrieve(article.getSource(), rowKey, SourceEntity.class);
+            TableOperation retrieveSource = TableOperation.retrieve(article.getSource(), Backend.ROW_KEY, SourceEntity.class);
 
             SourceEntity specificSource = sourceTable.execute(retrieveSource).getResultAsType();
 
@@ -109,18 +108,61 @@ public class Backend {
 
     public static void getWeight(String name) {
         String weightTableName = "Weight";
-        String rowKey = "incredible";
 
         try {
             CloudTable weightTable = client.getTableReference(weightTableName);
 
-            TableOperation retrieveWeight = TableOperation.retrieve(name, rowKey, WeightEntity.class);
+            TableOperation retrieveWeight = TableOperation.retrieve(name, Backend.ROW_KEY, WeightEntity.class);
 
             WeightEntity specificWeight = weightTable.execute(retrieveWeight).getResultAsType();
 
             if (specificWeight != null) {
                 System.out.println("NAME: " + specificWeight.getPartitionKey() + "\nVALUE: " + specificWeight.getValue());
             }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void clearSourceTypeTable(String tableName) {
+        try {
+            CloudTable tableToClear = client.getTableReference(tableName);
+            String filter = TableQuery.generateFilterCondition(Backend.ROW_KEY, TableQuery.QueryComparisons.EQUAL, Backend.ROW_KEY);
+
+            TableQuery<SourceEntity> sourceQuery = TableQuery.from(SourceEntity.class).where(filter);
+
+            for (SourceEntity source : tableToClear.execute(sourceQuery)) {
+                TableOperation deleteSource = TableOperation.delete(source);
+                tableToClear.execute(deleteSource);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void clearWeightTypeTable(String tableName) {
+        try {
+            CloudTable tableToClear = client.getTableReference(tableName);
+            String filter = TableQuery.generateFilterCondition(Backend.ROW_KEY, TableQuery.QueryComparisons.EQUAL, Backend.ROW_KEY);
+
+            TableQuery<WeightEntity> weightQuery = TableQuery.from(WeightEntity.class).where(filter);
+
+            for (WeightEntity weight : tableToClear.execute(weightQuery)) {
+                TableOperation deleteWeight = TableOperation.delete(weight);
+                tableToClear.execute(deleteWeight);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void deleteTable(String tableName) {
+        try {
+            CloudTable tableToDelete = client.getTableReference(tableName);
+            tableToDelete.deleteIfExists();
         }
         catch (Exception ex) {
             ex.printStackTrace();

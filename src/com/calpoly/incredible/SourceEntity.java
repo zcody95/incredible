@@ -12,7 +12,7 @@ public class SourceEntity extends TableServiceEntity {
 
     public SourceEntity(String name) {
         this.partitionKey = name;
-        this.rowKey = "incredible";
+        this.rowKey = Backend.ROW_KEY;
     }
 
     public SourceEntity() {}

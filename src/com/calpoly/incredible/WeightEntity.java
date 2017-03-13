@@ -9,7 +9,7 @@ public class WeightEntity extends SourceEntity {
 
     public WeightEntity (String name) {
         this.partitionKey = name;
-        this.rowKey = "incredible";
+        this.rowKey = Backend.ROW_KEY;
     }
 
     public String getName() {return this.name;}
