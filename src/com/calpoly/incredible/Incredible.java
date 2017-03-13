@@ -74,16 +74,25 @@ public class Incredible {
             System.out.println("Calculating score. This may take a minute...");
             score = LearningAlgorithm.calculate(article);
          }
+         float boost = 0f;
+         float newScore = score;
+         float cutoff = LearningAlgorithm.getCutoff();
          if (next.toLowerCase().equals("n") || next.toLowerCase().equals("y")) {
             System.out.println("Updating Backend...");
+            if (score < cutoff && next.toLowerCase().equals("y")) {
+               newScore = cutoff + (cutoff - score) / article.getTotal();
+            }
+            else if (score >= cutoff && next.toLowerCase().equals("n")) {
+               newScore = cutoff - (score - cutoff) / article.getTotal();
+            }
             if (article.getSourceScore() == -1) {
-               Backend.insertNewSource(article.getSource(), score, 1);
+               Backend.insertNewSource(article.getSource(), newScore, 1);
             } else {
-               Backend.insertNewSource(article.getSource(), (score + article.getSourceScore() * (article.getTotal() - 1)) / article.getTotal(), article.getTotal());
+               Backend.insertNewSource(article.getSource(), (newScore + article.getSourceScore() * (article.getTotal() - 1)) / article.getTotal(), article.getTotal());
             }
          }
 
-         if ( score >= LearningAlgorithm.getCutoff()) {
+         if ( score >= cutoff) {
             System.out.println("result: y");
          }
          else {

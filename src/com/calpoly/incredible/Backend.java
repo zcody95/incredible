@@ -45,7 +45,7 @@ public class Backend {
     }
 
     public static void insertNewSource(String name, double score, int numArticles) throws Exception {
-        String sourceTable = "Source";
+        String sourceTable = "SourceTwo";
 
         try {
             CloudTable newTable = client.getTableReference(sourceTable);
@@ -65,7 +65,7 @@ public class Backend {
     }
 
     public static void getSource(Article article)  throws Exception{
-        String sourceTableName = "Source";
+        String sourceTableName = "SourceTwo";
         String rowKey = "incredible";
 
         try {
