@@ -25,7 +25,5 @@ public class SourceEntity extends TableServiceEntity {
     public void setNumArticles(int articles) {this.numArticles = articles;}
 
     @Override
-    public String toString() {
-        return "Name: " + this.getPartitionKey() + " Score: " + this.score + "\n";
-    }
+    public String toString() {return "Name: " + this.getPartitionKey() + " Score: " + this.score + "\n";}
 }
