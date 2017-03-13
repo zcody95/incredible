@@ -17,10 +17,15 @@ public class SourceEntity extends TableServiceEntity {
 
     public SourceEntity() {}
 
-    public String getName() {return this.name;}
+    public String getName() {return this.partitionKey;}
     public double getScore() {return this.score;}
     public int getNumArticles() {return this.numArticles;}
     public void setName(String name) {this.name = name;}
     public void setScore(double newScore) {this.score = newScore;}
     public void setNumArticles(int articles) {this.numArticles = articles;}
+
+    @Override
+    public String toString() {
+        return "Name: " + this.getPartitionKey() + " Score: " + this.score + "\n";
+    }
 }

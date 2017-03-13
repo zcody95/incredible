@@ -130,7 +130,7 @@ public class Backend {
             CloudTable tableToClear = client.getTableReference(tableName);
             String filter = TableQuery.generateFilterCondition(Backend.ROW_KEY, TableQuery.QueryComparisons.EQUAL, Backend.ROW_KEY);
 
-            TableQuery<SourceEntity> sourceQuery = TableQuery.from(SourceEntity.class).where(filter);
+            TableQuery<SourceEntity> sourceQuery = TableQuery.from(SourceEntity.class);
 
             for (SourceEntity source : tableToClear.execute(sourceQuery)) {
                 TableOperation deleteSource = TableOperation.delete(source);
@@ -147,7 +147,7 @@ public class Backend {
             CloudTable tableToClear = client.getTableReference(tableName);
             String filter = TableQuery.generateFilterCondition(Backend.ROW_KEY, TableQuery.QueryComparisons.EQUAL, Backend.ROW_KEY);
 
-            TableQuery<WeightEntity> weightQuery = TableQuery.from(WeightEntity.class).where(filter);
+            TableQuery<WeightEntity> weightQuery = TableQuery.from(WeightEntity.class);
 
             for (WeightEntity weight : tableToClear.execute(weightQuery)) {
                 TableOperation deleteWeight = TableOperation.delete(weight);
@@ -163,6 +163,41 @@ public class Backend {
         try {
             CloudTable tableToDelete = client.getTableReference(tableName);
             tableToDelete.deleteIfExists();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void mergeSourceTables(String firstTable, String secondTable) {
+        try {
+            CloudTable firstTableRef = client.getTableReference(firstTable);
+            CloudTable secondTableRef = client.getTableReference(secondTable);
+
+            String filter = TableQuery.generateFilterCondition(Backend.ROW_KEY, TableQuery.QueryComparisons.EQUAL, Backend.ROW_KEY);
+            TableQuery<SourceEntity> sourceQuery = TableQuery.from(SourceEntity.class);
+
+            for (SourceEntity source : firstTableRef.execute(sourceQuery)) {
+                TableOperation insertSource = TableOperation.insert(source);
+                secondTableRef.execute(insertSource);
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void listSources(String tableName) {
+        try {
+            CloudTable sourceTable = client.getTableReference(tableName);
+            String filter = TableQuery.generateFilterCondition(Backend.ROW_KEY, TableQuery.QueryComparisons.EQUAL, Backend.ROW_KEY);
+            TableQuery<SourceEntity> sourceQuery = TableQuery.from(SourceEntity.class);
+
+            System.out.println("LIST OF SOURCES IN " + tableName + ":\n");
+            for (SourceEntity source : sourceTable.execute(sourceQuery)) {
+                System.out.println(source.toString());
+            }
+
         }
         catch (Exception ex) {
             ex.printStackTrace();
