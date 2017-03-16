@@ -152,4 +152,6 @@ public class Article {
    public String getSource() {
        return source;
    }
+
+   public boolean hasSource() {return sourceScore != -1.0f;}
 }

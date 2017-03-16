@@ -51,17 +51,17 @@ public class LearningAlgorithm {
         if (credible) {
             change = credibleLearn(article);
             if (score < weights.cutoff) {
-                weight(change, article.getSourceScore() != -1, article, score);
+                weight(change, article, score);
             }
         }
         else {
             change = incredibleLearn(article);
             if (score >= weights.cutoff) {
-                weight(change, article.getSourceScore() != -1, article, score);
+                weight(change, article, score);
             }
         }
 
-        if (article.getSourceScore() == -1) {
+        if (!article.hasSource()) {
             baseWeights.total++;
             currentFile = new File(BASE_PATH);
             writeFile(currentFile, baseWeights);
@@ -137,7 +137,7 @@ public class LearningAlgorithm {
             field = Field.ARTICLE;
         }
 
-        if (article.getSourceScore() != -1f) {
+        if (article.hasSource()) {
             distance = incredible.getSourceScore() - article.getSourceScore();
             if (Math.abs(distance) > Math.abs(maxDistance)) {
                 field = Field.SOURCE;
@@ -168,12 +168,12 @@ public class LearningAlgorithm {
         return field;
     }
 
-    private static void weight(Field field, boolean hasSource, Article art, float score) throws Exception{
+    private static void weight(Field field, Article art, float score) throws Exception{
         float newWeight;
         float oldWeight;
         Weights wght;
 
-        if (hasSource) {
+        if (art.hasSource()) {
             wght = weights;
         }
         else {
@@ -185,7 +185,7 @@ public class LearningAlgorithm {
                 oldWeight = wght.semWeight;
                 newWeight = ((art.getRelatednesScores() * oldWeight) + (wght.cutoff - score)) / art.getRelatednesScores();
                 wght.semWeight = (newWeight + wght.semWeight * wght.total) / (wght.total + 1);
-                if (hasSource) {
+                if (art.hasSource()) {
                     newWeight = (wght.semWeight - oldWeight) / 3;
                     wght.srcWeight -= newWeight;
                 }
@@ -200,7 +200,7 @@ public class LearningAlgorithm {
                 newWeight = (((art.getNumArticlesSameWeek() / 25) * oldWeight) + (wght.cutoff - score)) / (art.getNumArticlesSameWeek() / 25);
                 wght.weekWeight = (newWeight + wght.weekWeight * wght.total) / (wght.total + 1);
 
-                if (hasSource) {
+                if (art.hasSource()) {
                     newWeight = (wght.weekWeight - oldWeight) / 3;
                     wght.srcWeight -= newWeight;
                 }
@@ -215,7 +215,7 @@ public class LearningAlgorithm {
                 newWeight = (((art.getNumArticlesSameDay() / 25) * oldWeight) + (wght.cutoff - score)) / (art.getNumArticlesSameDay() / 25);
                 wght.dayWeight = (newWeight + wght.dayWeight * wght.total) / (wght.total + 1);
 
-                if (hasSource) {
+                if (art.hasSource()) {
                     newWeight = (wght.dayWeight - oldWeight) / 3;
                     wght.srcWeight -= newWeight;
                 }

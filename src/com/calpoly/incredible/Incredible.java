@@ -72,7 +72,12 @@ public class Incredible {
             else if (score >= cutoff && next.toLowerCase().equals("n")) {
                newScore = cutoff - (score - cutoff) / article.getTotal();
             }
-            if (article.getSourceScore() == -1) {
+            else if (article.hasSource())
+            {
+               newScore = article.getSourceScore();
+            }
+
+            if (!article.hasSource()) {
                Backend.insertNewSource(sourceTable, article.getSource(), newScore, 1);
             } else {
                Backend.insertNewSource(sourceTable, article.getSource(), (newScore + article.getSourceScore() * (article.getTotal() - 1)) / article.getTotal(), article.getTotal());
