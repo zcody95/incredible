@@ -21,7 +21,6 @@ public final class RawScoreCalculator {
             System.out.println("Textuality Exception during post: ");
             throw e;
         }
-
         try {
             //find comparable articles
             Bing.search(article.getTitle());
