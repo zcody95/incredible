@@ -38,6 +38,11 @@ public class Backend {
         }
     }
 
+    public static void main(String[] args) throws Exception{
+        Backend.connectToBackend();
+        Backend.insertNewSource("SrcTable", "www.theonion.com", 0f, 2);
+    }
+
     public static void createNewTable(String tableName) {
         try {
             CloudTable newTable = client.getTableReference(tableName);

@@ -6,8 +6,8 @@ import java.util.Date;
  * @author roslynsierra
  */
 public class Article {
-   private float relatednessScore;
-   private float sourceScore = -1;
+   private float relatednessScore = 0.0f;
+   private float sourceScore = -1.0f;
    private int total = 1;
    private String title;
    private String body;
@@ -41,12 +41,12 @@ public class Article {
    }
 
    public String printAll() {
-      return "SOURCE: " + source + "\n"
-              + "TOTAL: " + total + "\n"
-              + "SOURCE SCORE: " + sourceScore + "\n"
-              + "NUMBER ARTICLES WEEK: " + numArticlesSameWeek + "\n"
-              + "NUMBER ARTICLES DAY: " + numArticlesSameDay + "\n"
-              + "RELATEDNESS SCORE 1: " + relatednessScore + "\n";
+      return "" + source + "\n"
+              + "" + total + "\n"
+              + "" + sourceScore + "\n"
+              + "" + numArticlesSameWeek + "\n"
+              + "" + numArticlesSameDay + "\n"
+              + "" + relatednessScore + "\n";
    }
 
    /*

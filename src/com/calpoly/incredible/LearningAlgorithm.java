@@ -21,23 +21,23 @@ public class LearningAlgorithm {
         float score;
 
         initializeWeights();
-        if (article.getSourceScore() == -1) {
+        if (!article.hasSource()) {
             score = baseWeights.semWeight * article.getRelatednesScores()
                     + baseWeights.weekWeight * ((float)article.getNumArticlesSameWeek() / 25.0f)
                     + baseWeights.dayWeight * ((float)article.getNumArticlesSameDay() / 25.0f);
-            System.out.println("Weights:\nSemWeights: " + baseWeights.semWeight
-                + "\nWeek: " + baseWeights.weekWeight
-                + "\nDay: " + baseWeights.dayWeight);
+            System.out.println("\n" + baseWeights.semWeight
+                + "\n\n" + baseWeights.weekWeight
+                + "\n" + baseWeights.dayWeight);
         }
         else {
             score = weights.semWeight * article.getRelatednesScores()
                     + weights.srcWeight * (article.getSourceScore() / 100.0f)
                     + weights.weekWeight * ((float)article.getNumArticlesSameWeek() / 25.0f)
                     + weights.dayWeight * ((float)article.getNumArticlesSameDay() / 25.0f);
-            System.out.println("Weights:\nSemWeights: " + weights.semWeight
-                    + "\nSrc: " + weights.srcWeight
-                    + "\nWeek: " + weights.weekWeight
-                    + "\nDay: " + weights.dayWeight);
+            System.out.println("\n" + weights.semWeight
+                    + "\n" + weights.srcWeight
+                    + "\n" + weights.weekWeight
+                    + "\n" + weights.dayWeight);
         }
 
         return score;
@@ -91,8 +91,8 @@ public class LearningAlgorithm {
             field = Field.ARTICLE;
         }
 
-        if (article.getSourceScore() != -1f) {
-            distance = ideal.getSourceScore() - article.getSourceScore();
+        if (article.hasSource()) {
+            distance = (ideal.getSourceScore()/100.0f) - (article.getSourceScore()/100.0f);
             if (Math.abs(distance) > Math.abs(maxDistance)) {
                 field = Field.SOURCE;
             }
@@ -138,7 +138,7 @@ public class LearningAlgorithm {
         }
 
         if (article.hasSource()) {
-            distance = incredible.getSourceScore() - article.getSourceScore();
+            distance = (incredible.getSourceScore()/100.0f) - (article.getSourceScore()/100.0f);
             if (Math.abs(distance) > Math.abs(maxDistance)) {
                 field = Field.SOURCE;
             }
@@ -227,7 +227,12 @@ public class LearningAlgorithm {
                 break;
             case SOURCE:
                 oldWeight = wght.srcWeight;
-                newWeight = ((art.getSourceScore() * oldWeight) + (wght.cutoff - score)) / art.getSourceScore();
+                if (art.getSourceScore() > 0.0f) {
+                    newWeight = (((art.getSourceScore()/100.0f) * oldWeight) + (wght.cutoff - score)) / (art.getSourceScore() / 100.0f);
+                }
+                else {
+                    newWeight = oldWeight;
+                }
                 wght.srcWeight = (newWeight + wght.srcWeight * wght.total) / (wght.total + 1);
                 newWeight = (wght.srcWeight - oldWeight) / 3;
                 wght.weekWeight -= newWeight;

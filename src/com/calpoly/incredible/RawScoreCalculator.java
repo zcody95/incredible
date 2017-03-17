@@ -33,7 +33,9 @@ public final class RawScoreCalculator {
             //sort the bing result by distance from original date. The first 5 are the closest to orignal date
             //which we will add semantic relatedness to.
             Bing.sortByDate(article.getDate());
-            article.setRelatednessScore(Bing.relatedness(article.getBody(), Bing.results.get(0).description));
+            if (Bing.results.size() > 0) {
+                article.setRelatednessScore(Bing.relatedness(article.getBody(), Bing.results.get(0).description));
+            }
         } catch (Exception e) {
             System.out.println("Exception getting dates from related Bing articles. ");
             throw e;

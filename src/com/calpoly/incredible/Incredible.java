@@ -28,7 +28,7 @@ public class Incredible {
     * in by the user.
     **/
    public static void main(String[] args) {
-      String sourceTable = "SourceTwo";
+      String sourceTable = "SrcTable";
       System.out.println("Enter a url:");
 
       try {
@@ -47,35 +47,36 @@ public class Incredible {
          System.out.println("Got article info");
          System.out.println(article.printAll() + "\n\n");
          //System.out.println(article.toString());
-         System.out.println("Is this article credible?");
-         next = s.next();
-         if (next.equals("y") || next.equals("Y")) {
-            System.out.println("Calculating score. This may take a minute...");
+         System.out.println("Credible?");
+         next = s.next().toLowerCase();
+         if (next.equals("y")) {
             score = LearningAlgorithm.calculateLearn(article, true);
             System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
-         } else if (next.equals("n") || next.equals("N")) {
-            System.out.println("Calculating score. This may take a minute...");
+         } else if (next.equals("n")) {
             score = LearningAlgorithm.calculateLearn(article, false);
             System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
          } else {
-            System.out.println("Calculating score. This may take a minute...");
             score = LearningAlgorithm.calculate(article);
          }
-         float boost = 0f;
          float newScore = score;
          float cutoff = LearningAlgorithm.getCutoff();
-         if (next.toLowerCase().equals("n") || next.toLowerCase().equals("y")) {
-            System.out.println("Updating Backend...");
-            if (score < cutoff && next.toLowerCase().equals("y")) {
+         if (next.equals("n") || next.equals("y")) {
+            System.out.println("...");
+            if (score < cutoff && next.equals("y")) {
                newScore = cutoff + (cutoff - score) / article.getTotal();
             }
-            else if (score >= cutoff && next.toLowerCase().equals("n")) {
+            else if (score >= cutoff && next.equals("n")) {
                newScore = cutoff - (score - cutoff) / article.getTotal();
             }
             else if (article.hasSource())
             {
-               newScore = article.getSourceScore();
+               if ((score >= cutoff && score < article.getSourceScore())
+                       || (score < cutoff && score > article.getSourceScore())) {
+                  newScore = article.getSourceScore();
+               }
             }
+
+            newScore = Math.min(Math.max(newScore, 0), 100);
 
             if (!article.hasSource()) {
                Backend.insertNewSource(sourceTable, article.getSource(), newScore, 1);
@@ -85,13 +86,18 @@ public class Incredible {
          }
 
          if ( score >= cutoff) {
-            System.out.println("result: y");
+            System.out.println("y");
          }
          else {
-            System.out.println("result: n");
+            System.out.println("n");
          }
-         System.out.println("given: " + next + "\nscore: " + score + "\ncutoff: " + LearningAlgorithm.getCutoff());
-
+         System.out.println(next + "\n" + score + "\n" + LearningAlgorithm.getCutoff());
+         if (score >= cutoff) {
+            System.out.println(Math.min(1.0f, 0.5f + (score / (50.0f - cutoff)) * 0.5f));
+         }
+         else {
+            System.out.println((score / cutoff) * 0.5f);
+         }
       }
       catch (Exception ex) {
          ex.printStackTrace();

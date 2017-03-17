@@ -104,7 +104,7 @@ public class Bing {
             return Float.parseFloat(response.getBody());
         } catch (Exception e) {
             e.printStackTrace();
-            return -1111.0f;
+            return 0.0f;
         }
     }
 
