@@ -41,12 +41,12 @@ public class Article {
    }
 
    public String printAll() {
-      return "" + source + "\n"
-              + "" + total + "\n"
-              + "" + sourceScore + "\n"
-              + "" + numArticlesSameWeek + "\n"
-              + "" + numArticlesSameDay + "\n"
-              + "" + relatednessScore + "\n";
+      return "Source: " + source + "\n"
+              + "Total: " + total + " article(s)\n"
+              + "Source Score: " + sourceScore + "%\n"
+              + "\nArticles same week:" + numArticlesSameWeek + "/25\n"
+              + "Articles same day: " + numArticlesSameDay + "/25\n"
+              + "Similarity: " + (relatednessScore * 100) + "%\n";
    }
 
    /*

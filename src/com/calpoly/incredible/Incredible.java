@@ -29,39 +29,42 @@ public class Incredible {
     **/
    public static void main(String[] args) {
       String sourceTable = "SrcTable";
-      System.out.println("Enter a url:");
-
+      String link, next = "?";
+      if (args.length == 2) {
+          if (args[1].toLowerCase().equals("y")) {
+              next = "y";
+          }
+          else if (args[1].toLowerCase().equals("n")) {
+              next = "n";
+          }
+      }
+      if (args.length < 1 || args.length > 2) {
+          System.out.println("Invalid arguments.");
+          return;
+      }
+      link = args[0];
       try {
-         Scanner s = new Scanner(System.in);
-         String next = s.next();
-
          // Calculate Raw Score
          article = new Article();
-         article.setUrl(next);
-         RawScoreCalculator.calculateRawScore(next, article);
+         article.setUrl(link);
+         RawScoreCalculator.calculateRawScore(link, article);
          Backend.connectToBackend();
          Backend.getSource(sourceTable, article);
 
          float score;
-
-         System.out.println("Got article info");
-         System.out.println(article.printAll() + "\n\n");
+         System.out.println(article.printAll());
          //System.out.println(article.toString());
-         System.out.println("Credible?");
-         next = s.next().toLowerCase();
          if (next.equals("y")) {
             score = LearningAlgorithm.calculateLearn(article, true);
-            System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
          } else if (next.equals("n")) {
             score = LearningAlgorithm.calculateLearn(article, false);
-            System.out.println(score + " >= " + LearningAlgorithm.getCutoff());
          } else {
             score = LearningAlgorithm.calculate(article);
          }
          float newScore = score;
          float cutoff = LearningAlgorithm.getCutoff();
          if (next.equals("n") || next.equals("y")) {
-            System.out.println("...");
+
             if (score < cutoff && next.equals("y")) {
                newScore = cutoff + (cutoff - score) / article.getTotal();
             }
@@ -86,22 +89,21 @@ public class Incredible {
          }
 
          if ( score >= cutoff) {
-            System.out.println("y");
+            System.out.print("Credible\nScore: ");
          }
          else {
-            System.out.println("n");
+            System.out.print("Not Credible\nScore: ");
          }
-         System.out.println(next + "\n" + score + "\n" + LearningAlgorithm.getCutoff());
          if (score >= cutoff) {
-            System.out.println(Math.min(1.0f, 0.5f + (score / (50.0f - cutoff)) * 0.5f));
+            System.out.println(100f * Math.min(1.0f, 0.5f + (score / (50.0f - cutoff)) * 0.5f) + "%");
          }
          else {
-            System.out.println((score / cutoff) * 0.5f);
+            System.out.println(100f * (score / cutoff) * 0.5f + "%");
          }
       }
       catch (Exception ex) {
-         ex.printStackTrace();
          System.out.println("Could not compute score.");
+         ex.printStackTrace();
       }
       // Compare to other articles
 

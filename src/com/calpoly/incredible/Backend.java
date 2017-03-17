@@ -28,7 +28,6 @@ public class Backend {
             storageAccount =
                     CloudStorageAccount.parse(storageConnectionString);
             client = storageAccount.createCloudTableClient();
-            System.out.println("STORAGE ACCOUNT: " + storageAccount.toString());
         }
         catch (Exception e)
         {
